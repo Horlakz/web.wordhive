@@ -31,4 +31,4 @@ jobs:
 
       - name: run new container
         run: |
-          docker run -d --restart unless-stopped --name wordhive -p 4400:3000 wordhive:${{ github.sha }}
+          docker run -d --restart unless-stopped --name wordhive -p 4500:3000 wordhive:${{ github.sha }}
