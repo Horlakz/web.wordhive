@@ -8,6 +8,7 @@ export const metadata: Metadata = {
     template: "%s | Wordhive",
     default: "Wordhive",
   },
+  icons: "/images/logo.png",
   description: "For Write Code, Write Docs, Write Anything",
   keywords: "wordhive, word, hive, write, code, docs, anything",
   authors: [{ name: "Horlakz", url: "https://github.com/horlakz" }],
