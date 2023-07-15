@@ -87,8 +87,8 @@ export default function Home() {
         </div>
 
         <div className="grid md:grid-cols-3">
-          {[...new Array(6)].map(() => (
-            <div className="w-96 p-6 space-y-4">
+          {[...new Array(6)].map((i) => (
+            <div key={i} className="w-96 p-6 space-y-4">
               <p className="text-black">
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit.
                 Aspernatur animi architecto, vitae reiciendis eos labore quaerat
