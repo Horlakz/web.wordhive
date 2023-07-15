@@ -14,9 +14,11 @@ function Wrapper({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <Toaster />
-      <Header />
-      {children}
-      <Footer />
+      <div>
+        <Header />
+        {children}
+        <Footer />
+      </div>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );

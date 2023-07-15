@@ -7,10 +7,10 @@ import Button from "@/components/Button";
 
 export default function Home() {
   return (
-    <main className="p-20 space-y-16">
+    <main className="sm:p-20 p-6 space-y-16">
       <section className="flex-center gap-20">
-        <div className="space-y-6">
-          <h4 className="text-7xl font-medium capitalize leading-[5.5rem]">
+        <div className="space-y-6 sm:p-0 pr-20">
+          <h4 className="text-5xl sm:text-7xl font-medium capitalize sm:leading-[5.5rem] leading-snug">
             <span className="text-primary">Your Bridge to perfect&nbsp;</span>
             <br />
             <span className="text-secondary">expression</span>
@@ -25,22 +25,36 @@ export default function Home() {
           <Button>Get Started</Button>
         </div>
 
-        <Image src={heroImage} width={500} height={500} alt="Hero" />
+        <Image
+          src={heroImage}
+          width={500}
+          height={500}
+          alt="Hero"
+          className="sm:block hidden"
+        />
       </section>
 
       <section className="flex-col-center gap-10">
         <div className="text-center">
-          <h3 className="text-primary text-3xl font-semibold">Why Wordhive</h3>
-          <p className="text-lg text-dark-600">
+          <h3 className="text-primary sm:text-3xl text-xl font-semibold">
+            Why Wordhive
+          </h3>
+          <p className="sm:text-lg text-dark-600">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit,
             iste.
           </p>
         </div>
 
-        <div className="flex-center gap-4">
+        <div className="flex-center flex-col sm:flex-row gap-8">
           {[...new Array(3)].map((i) => (
             <div key={i} className="space-y-4">
-              <Image src={dummy} width={48} height={48} alt="icon" />
+              <Image
+                src={dummy}
+                width={48}
+                height={48}
+                alt="icon"
+                className="mb-4"
+              />
               <span className="text-dark-900 font-semibold text-xl">
                 The most inspiring future
               </span>
@@ -54,7 +68,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="px-48 flex-center gap-10">
+      <section className="px-48 sm:flex center gap-10 hidden">
         <div>
           <h5 className="text-2xl font-semibold text-primary">
             Have any Inquiries?
@@ -78,10 +92,10 @@ export default function Home() {
 
       <section className="flex-col-center gap-10">
         <div className="text-center">
-          <h3 className="text-primary text-3xl font-semibold">
+          <h3 className="text-primary sm:text-3xl text-xl font-semibold">
             Client Reviews
           </h3>
-          <p className="text-lg text-dark-600">
+          <p className="sm:text-lg text-dark-600">
             Here are the things a couple of our clients say about us
           </p>
         </div>

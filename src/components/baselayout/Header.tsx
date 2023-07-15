@@ -4,6 +4,7 @@ import React from "react";
 import { usePathname } from "next/navigation";
 
 import navLinks from "@/store/data/nav-links.json";
+import menu from "@/assets/icons/menu.svg";
 
 const Header = () => {
   const pathname = usePathname();
@@ -12,7 +13,7 @@ const Header = () => {
     <header className="flex justify-between items-center capitalize px-16 py-4 shadow-lg">
       <Image src="/images/logo.png" width={40} height={40} alt="logo" />
 
-      <nav>
+      <nav className="hidden sm:block">
         <ul className="flex-center gap-12">
           {navLinks.map((link, i) => {
             const isActive = pathname.startsWith(link.path);
@@ -31,9 +32,11 @@ const Header = () => {
         </ul>
       </nav>
 
-      <Link className="text-secondary" href={"/login"}>
+      <Link className="text-secondary hidden sm:block" href={"/login"}>
         Sign In
       </Link>
+
+      <Image src={menu} alt="menu" className="sm:hidden" />
     </header>
   );
 };

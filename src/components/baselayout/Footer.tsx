@@ -15,8 +15,8 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer className="px-40 space-y-20">
-      <section className="flex justify-between items-center">
+    <footer className="sm:px-40 pb-6 sm:space-y-20 space-y-6">
+      <section className="flex justify-between items-center sm:flex-row flex-col">
         <h1 className="flex items-center gap-1">
           <Image
             src="/images/logo.png"
@@ -28,7 +28,7 @@ const Footer = () => {
         </h1>
 
         <nav>
-          <ul className="flex-center gap-20">
+          <ul className="flex-center sm:gap-20 gap-4">
             {navLinks.map((link, i) => {
               return (
                 <li key={i}>
@@ -42,7 +42,7 @@ const Footer = () => {
         </nav>
       </section>
 
-      <section className="px-6 flex justify-between items-center text-sm text-[#525252]">
+      <section className="px-6 flex flex-wrap justify-between items-center text-sm text-[#525252]">
         <div className="flex items-center gap-2">
           {socialLinks.map((link, i) => (
             <a key={i} href={link.href}>
@@ -55,7 +55,7 @@ const Footer = () => {
           Copyright &copy;{new Date().getFullYear()} {url}
         </span>
 
-        <span className="flex gap-1">
+        <span className="flex gap-1 sm:p-0 pl-10">
           <span>Designed by</span>
           <a href="https://dribbble.com/haropis" className="text-secondary">
             Haropis Inc
