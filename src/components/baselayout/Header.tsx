@@ -11,7 +11,9 @@ const Header = () => {
 
   return (
     <header className="flex justify-between items-center capitalize px-16 py-4 shadow-lg">
-      <Image src="/images/logo.png" width={40} height={40} alt="logo" />
+      <Link href="/">
+        <Image src="/images/logo.png" width={40} height={40} alt="logo" />
+      </Link>
 
       <nav className="hidden sm:block">
         <ul className="flex-center gap-12">
