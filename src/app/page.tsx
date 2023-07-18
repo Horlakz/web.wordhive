@@ -4,6 +4,7 @@ import heroImage from "@/assets/images/hero.svg";
 import customerCare from "@/assets/images/customer-care.png";
 import dummy from "@/assets/images/dummy.png";
 import Button from "@/components/Button";
+import InquirySection from "@/components/about/InquirySection";
 
 export default function Home() {
   return (
@@ -68,27 +69,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="px-48 sm:flex center gap-10 hidden">
-        <div>
-          <h5 className="text-2xl font-semibold text-primary">
-            Have any Inquiries?
-          </h5>
-          <p className="text-dark-600 mb-4 w-[35rem]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo nihil
-            ipsa quos similique alias. Deleniti optio, dolorum nostrum ab
-            perspiciatis est fugiat, sed quaerat omnis eligendi quibusdam,
-            repellat atque ex.
-          </p>
-          <Button>Contact us now!</Button>
-        </div>
-
-        <Image
-          src={customerCare}
-          width={400}
-          height={400}
-          alt="customer care"
-        />
-      </section>
+      <InquirySection />
 
       <section className="flex-col-center gap-10">
         <div className="text-center">
