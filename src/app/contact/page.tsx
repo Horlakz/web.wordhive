@@ -1,0 +1,55 @@
+import Image from "next/image";
+import React from "react";
+
+import Button from "@/components/Button";
+import InputGroup from "@/components/InputGroup";
+import SendIcon from "@/assets/icons/send.svg";
+
+const ContactPage = () => {
+  return (
+    <main className="p-20">
+      <section className="flex-center w-full gap-8">
+        <div className="w-3/5 py-10 px-6 space-y-3 bg-primary text-white">
+          <h3 className="text-3xl font-semibold">Contact Us</h3>
+          <p className="">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus
+            dignissimos, fugiat maiores non facere error recusandae.
+          </p>
+
+          <div className="space-y-2">
+            {[1, 2, 3].map((contact, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <Image src="" alt="mail icon" />
+                <div>
+                  <span className="text-xl font-medium">Chat with us</span>
+                  <p>React out to us at hello@wordhive.com</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="w-full p-6 gap-x-6 gap-y-4 grid grid-cols-2">
+          <InputGroup.Input label="Full Name" />
+          <InputGroup.Input label="Email" type="email" />
+          <InputGroup.Input label="Phone" type="tel" />
+          <InputGroup.Input label="Country" />
+          <InputGroup.TextArea
+            className="col-span-2"
+            label="Your Message"
+            rows={5}
+          />
+          <Button
+            className="col-span-2 justify-center"
+            icon={<Image src={SendIcon} alt="icon" width={20} height={20} />}
+            iconPosition="right"
+          >
+            Send Message
+          </Button>
+        </div>
+      </section>
+    </main>
+  );
+};
+
+export default ContactPage;
