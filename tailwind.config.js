@@ -12,6 +12,10 @@ module.exports = {
       colors: {
         primary: "#009CFF",
         secondary: "#FF6900",
+        success: "#4BB543",
+        danger: "#FF4136",
+        warning: "#FFC300",
+        info: "#7FDBFF",
         dark: {
           600: "#525252",
           900: "#171717",
