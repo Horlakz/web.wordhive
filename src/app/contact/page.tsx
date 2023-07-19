@@ -56,8 +56,9 @@ const ContactPage = () => {
         </h3>
 
         <div className="grid sm:grid-cols-2 gap-6">
-          {[...new Array(7)].map(() => (
+          {[...new Array(7)].map((content, i) => (
             <Accordion
+              key={i}
               title="Hello World"
               descr="Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis quae necessitatibus magni nobis unde ipsa totam quia reiciendis porro dolore mollitia distinctio qui in assumenda vero, architecto tempore natus molestiae!"
             />
