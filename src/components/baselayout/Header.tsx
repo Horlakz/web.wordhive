@@ -10,7 +10,7 @@ const Header = () => {
   const pathname = usePathname();
 
   return (
-    <header className="flex justify-between items-center capitalize px-16 py-4 shadow-lg">
+    <header className="flex justify-between items-center capitalize sm:px-16 px-8 py-4 shadow-lg">
       <Link href="/">
         <Image src="/images/logo.png" width={40} height={40} alt="logo" />
       </Link>
