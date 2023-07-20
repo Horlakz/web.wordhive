@@ -54,7 +54,7 @@ export default function Home() {
                 width={48}
                 height={48}
                 alt="icon"
-                className="mb-4"
+                className="mb-4 rounded-full"
               />
               <span className="text-dark-900 font-semibold text-xl">
                 The most inspiring future
