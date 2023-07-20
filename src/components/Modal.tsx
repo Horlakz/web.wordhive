@@ -13,7 +13,7 @@ const Modal: FC<Props> = ({
   children,
   visibility,
   setVisibility,
-  showCloseButton = true,
+  showCloseButton = false,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -67,17 +67,17 @@ const Modal: FC<Props> = ({
           ref={modalRef}
         >
           <motion.div
-            className="shadow-lg w-fit mx-auto relative bg-white rounded-lg"
+            className="shadow-lg w-fit mx-auto relative bg-white rounded-3xl"
             variants={modalVariants}
           >
             {children}
 
             {showCloseButton && (
               <button
-                className="absolute top-1.5 right-1.5 p-2 border-none rounded-full"
+                className="absolute top-0.5 right-4 p-2 border-none rounded-full"
                 onClick={handleClose}
               >
-                <span className="text-[#60CD99] text-2xl font-semibold">X</span>
+                <span className="text-[#60CD99] text-3xl font-semibold">x</span>
               </button>
             )}
           </motion.div>
