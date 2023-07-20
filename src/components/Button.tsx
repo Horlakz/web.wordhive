@@ -40,6 +40,7 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
+      type="button"
       className={twMerge(
         "rounded-md px-6 py-2.5 flex items-center",
         getVariantClasses(),
