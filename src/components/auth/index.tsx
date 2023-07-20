@@ -1,11 +1,12 @@
+import { AnimatePresence, motion } from "framer-motion";
 import { FC, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
-import { PageT } from "./types";
-import Login from "./Login";
-import Register from "./Register";
-import ForgotPassword from "./ForgotPassword";
+import { AuthProvider } from "@/store/context/auth";
 import Modal from "../Modal";
+import ForgotPassword from "./pages/ForgotPassword";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import { PageT } from "./types";
 
 interface AuthModalProps {
   visibility: boolean;
@@ -27,7 +28,8 @@ const ModalContent = () => {
 
   return (
     <AnimatePresence mode="wait">
-      <motion.div
+      <motion.main
+        className="p-28 flex-center"
         key={currentPage}
         style={{
           opacity: 1,
@@ -38,7 +40,7 @@ const ModalContent = () => {
         transition={{ duration: 0.3 }}
       >
         {page[currentPage]}
-      </motion.div>
+      </motion.main>
     </AnimatePresence>
   );
 };
@@ -46,9 +48,9 @@ const ModalContent = () => {
 const AuthModal: FC<AuthModalProps> = ({ visibility, setVisibility }) => {
   return (
     <Modal visibility={visibility} setVisibility={setVisibility}>
-      <main className="p-40 flex-center">
+      <AuthProvider>
         <ModalContent />
-      </main>
+      </AuthProvider>
     </Modal>
   );
 };
