@@ -1,13 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import { usePathname } from "next/navigation";
+import React from "react";
 
-import navLinks from "@/store/data/nav-links.json";
 import menu from "@/assets/icons/menu.svg";
+import navLinks from "@/store/data/nav-links.json";
+import Button from "../Button";
+import AuthModal from "../auth";
 
 const Header = () => {
   const pathname = usePathname();
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   return (
     <header className="flex justify-between items-center capitalize sm:px-16 px-8 py-4 shadow-lg">
@@ -34,11 +37,21 @@ const Header = () => {
         </ul>
       </nav>
 
-      <Link className="text-secondary hidden sm:block" href={"/login"}>
+      <Button
+        variant="outline"
+        colorScheme="secondary"
+        className="border-none hidden sm:block"
+        onClick={() => setIsModalOpen(true)}
+      >
         Sign In
-      </Link>
+      </Button>
 
       <Image src={menu} alt="menu" className="sm:hidden" />
+
+      <AuthModal
+        visibility={isModalOpen}
+        setVisibility={() => setIsModalOpen(false)}
+      />
     </header>
   );
 };
