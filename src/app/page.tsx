@@ -1,8 +1,7 @@
 import Image from "next/image";
 
+import dummyCircle from "@/assets/images/dummy-circle.png";
 import heroImage from "@/assets/images/hero.svg";
-import customerCare from "@/assets/images/customer-care.png";
-import dummy from "@/assets/images/dummy.png";
 import Button from "@/components/Button";
 import InquirySection from "@/components/about/InquirySection";
 
@@ -50,7 +49,7 @@ export default function Home() {
           {[...new Array(3)].map((i) => (
             <div key={i} className="space-y-4">
               <Image
-                src={dummy}
+                src={dummyCircle}
                 width={48}
                 height={48}
                 alt="icon"
@@ -90,7 +89,13 @@ export default function Home() {
                 rem deserunt sequi eligendi culpa asperiores natus alias in.
               </p>
               <div className="flex items-center gap-3">
-                <Image src={dummy} width={40} height={40} alt="user" />
+                <Image
+                  src={dummyCircle}
+                  width={40}
+                  height={40}
+                  alt="user"
+                  className="rounded-lg"
+                />
                 <div className="grid gap-1">
                   <span className="text-gray-900 font-medium">
                     Firstname Lastname
