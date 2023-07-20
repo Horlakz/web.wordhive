@@ -4,8 +4,12 @@ import { FC, useState } from "react";
 import { AuthProvider } from "@/store/context/auth";
 import Modal from "../Modal";
 import ForgotPassword from "./pages/ForgotPassword";
-import Login from "./pages/Login";
+import VerifyEmail from "./pages/verifyEmail";
 import Register from "./pages/Register";
+import Verification from "./pages/Verification";
+import Success from "./pages/Success";
+import ResetPassword from "./pages/ResetPassword";
+import Login from "./pages/login";
 import { PageT } from "./types";
 
 interface AuthModalProps {
@@ -14,22 +18,26 @@ interface AuthModalProps {
 }
 
 const ModalContent = () => {
-  const [currentPage, setCurrentPage] = useState<PageT>("login");
+  const [currentPage, setCurrentPage] = useState<PageT>("verifyEmail");
 
   const handlePageChange = (page: PageT) => {
     setCurrentPage(page);
   };
 
   const page: Record<PageT, React.ReactNode> = {
+    verifyEmail: <VerifyEmail goTo={handlePageChange} />,
     login: <Login goTo={handlePageChange} />,
     register: <Register goTo={handlePageChange} />,
     forgotPassword: <ForgotPassword goTo={handlePageChange} />,
+    resetPassword: <ResetPassword goTo={handlePageChange} />,
+    success: <Success goTo={handlePageChange} />,
+    verification: <Verification goTo={handlePageChange} />,
   };
 
   return (
     <AnimatePresence mode="wait">
       <motion.main
-        className="p-28 flex-center normal-case"
+        className="sm:px-28 px-10 flex-center normal-case"
         key={currentPage}
         style={{
           opacity: 1,
