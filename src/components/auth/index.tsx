@@ -29,7 +29,7 @@ const ModalContent = () => {
   return (
     <AnimatePresence mode="wait">
       <motion.main
-        className="p-28 flex-center"
+        className="p-28 flex-center normal-case"
         key={currentPage}
         style={{
           opacity: 1,
