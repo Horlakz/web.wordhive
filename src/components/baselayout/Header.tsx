@@ -5,7 +5,7 @@ import React from "react";
 
 import menu from "@/assets/icons/menu.svg";
 import navLinks from "@/store/data/nav-links.json";
-import Button from "../Button";
+import Button from "@/components/common/Button";
 import AuthModal from "../auth";
 
 const Header = () => {

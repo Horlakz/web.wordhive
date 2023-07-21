@@ -1,9 +1,9 @@
-import { useContext } from "react";
 import Image from "next/image";
+import { useContext } from "react";
 
-import { AuthContext } from "@/store/context/auth";
 import Verified from "@/assets/icons/success.svg";
-import Button from "@/components/Button";
+import Button from "@/components/common/Button";
+import { AuthContext } from "@/store/context/auth";
 import { PageT } from "../types";
 
 interface SuccessProps {

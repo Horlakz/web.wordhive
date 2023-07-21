@@ -1,9 +1,9 @@
-import { FC, useContext, useMemo, useRef, useState } from "react";
+import { FC, useContext } from "react";
 
+import Button from "@/components/common/Button";
+import OtpInput from "@/components/common/OtpInput";
 import { AuthContext, VerificationType } from "@/store/context/auth";
-import Button from "../../Button";
 import { PageT } from "../types";
-import OtpInput from "@/components/OtpInput";
 
 interface LoginProps {
   goTo: (page: PageT) => void;

@@ -1,15 +1,15 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { FC, useState } from "react";
 
+import Modal from "@/components/common/Modal";
 import { AuthProvider } from "@/store/context/auth";
-import Modal from "../Modal";
 import ForgotPassword from "./pages/ForgotPassword";
-import VerifyEmail from "./pages/verifyEmail";
 import Register from "./pages/Register";
-import Verification from "./pages/Verification";
-import Success from "./pages/Success";
 import ResetPassword from "./pages/ResetPassword";
+import Success from "./pages/Success";
+import Verification from "./pages/Verification";
 import Login from "./pages/login";
+import VerifyEmail from "./pages/verifyEmail";
 import { PageT } from "./types";
 
 interface AuthModalProps {

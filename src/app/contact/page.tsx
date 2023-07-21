@@ -1,10 +1,9 @@
 import Image from "next/image";
-import React from "react";
 
-import Button from "@/components/Button";
-import InputGroup from "@/components/InputGroup";
 import SendIcon from "@/assets/icons/send.svg";
-import Accordion from "@/components/Accordion";
+import Accordion from "@/components/common/Accordion";
+import Button from "@/components/common/Button";
+import InputGroup from "@/components/common/InputGroup";
 
 const ContactPage = () => {
   return (

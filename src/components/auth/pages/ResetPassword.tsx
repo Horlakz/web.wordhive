@@ -1,10 +1,10 @@
 import { FC, useContext, useState } from "react";
-
-import InputGroup from "@/components/InputGroup";
-import { AuthContext, VerificationType } from "@/store/context/auth";
-import Button from "../../Button";
-import { PageT } from "../types";
 import { toast } from "react-hot-toast";
+
+import Button from "@/components/common/Button";
+import InputGroup from "@/components/common/InputGroup";
+import { AuthContext } from "@/store/context/auth";
+import { PageT } from "../types";
 
 interface ForgotPasswordProps {
   goTo: (page: PageT) => void;

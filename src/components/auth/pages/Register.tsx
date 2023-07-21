@@ -1,9 +1,9 @@
 import { useContext, FC, useState } from "react";
 
 import { PageT } from "../types";
-import Button from "../../Button";
+import Button from "@/components/common/Button";
 import { AuthContext, VerificationType } from "@/store/context/auth";
-import InputGroup from "@/components/InputGroup";
+import InputGroup from "@/components/common/InputGroup";
 
 interface RegisterProps {
   goTo: (page: PageT) => void;
