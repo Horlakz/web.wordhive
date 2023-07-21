@@ -18,10 +18,24 @@ const VerifyPassword: FC<Props> = ({ goTo }) => {
   };
 
   return (
-    <div className="grid center gap-10 py-16">
+    <div className="grid center gap-4 py-16">
       <h2 className="text-primary text-2xl font-medium">
         Verify Your Password
       </h2>
+
+      <div className="flex rounded-3xl bg-[#E5E5E5]">
+        <span className="bg-[#F5F5F5] py-2 px-4 shadow-md shadow-[#1018281a] rounded-3xl">
+          {email}
+        </span>
+        <Button
+          variant="outline"
+          colorScheme="secondary"
+          className="border-none px-3"
+          onClick={() => goTo("verifyEmail")}
+        >
+          change
+        </Button>
+      </div>
 
       <form className="flex flex-col gap-3">
         <InputGroup.Input
@@ -47,14 +61,14 @@ const VerifyPassword: FC<Props> = ({ goTo }) => {
         </Button>
 
         <p className="flex center">
-          <span>Change Email Address</span>
+          <span>Don&apos;t have an Account?</span>
           <Button
             variant="outline"
             colorScheme="secondary"
             className="border-none w-fit"
-            onClick={() => goTo("verifyEmail")}
+            onClick={() => goTo("register")}
           >
-            Update
+            Register
           </Button>
         </p>
       </form>
