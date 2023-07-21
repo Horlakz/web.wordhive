@@ -1,9 +1,9 @@
 import { FC, useContext } from "react";
 import { toast } from "react-hot-toast";
 
+import Button from "@/components/common/Button";
 import InputGroup from "@/components/common/InputGroup";
 import { AuthContext } from "@/store/context/auth";
-import Button from "@/components/common/Button";
 import { PageT } from "../types";
 
 interface LoginProps {
