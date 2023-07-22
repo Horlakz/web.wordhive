@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 
 import customerCare from "@/assets/images/customer-care.png";
-import Button from "@/components/Button";
+import Button from "@/components/common/Button";
 
 function InquirySection() {
   return (

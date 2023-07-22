@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import dummyCircle from "@/assets/images/dummy-circle.png";
 import heroImage from "@/assets/images/hero.svg";
-import Button from "@/components/Button";
+import Button from "@/components/common/Button";
 import InquirySection from "@/components/about/InquirySection";
 
 export default function Home() {
