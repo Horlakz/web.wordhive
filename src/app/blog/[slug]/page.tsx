@@ -79,7 +79,7 @@ const ViewBlog: NextPage<Params> = ({ params }) => {
 
           <div>
             {[...new Array(5)].map((_, i) => (
-              <div>
+              <div key={i}>
                 <span className="font-semibold text-lg">
                   Firstname Lastname
                 </span>
