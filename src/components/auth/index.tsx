@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { FC, useState } from "react";
+import { useContext, useState } from "react";
 
 import Modal from "@/components/common/Modal";
-import { AuthProvider } from "@/store/context/auth";
+import { AuthContext } from "@/store/context/auth";
 import ForgotPassword from "./pages/ForgotPassword";
 import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
@@ -11,11 +11,6 @@ import Verification from "./pages/Verification";
 import Login from "./pages/login";
 import VerifyEmail from "./pages/verifyEmail";
 import { PageT } from "./types";
-
-interface AuthModalProps {
-  visibility: boolean;
-  setVisibility: () => void;
-}
 
 const ModalContent = () => {
   const [currentPage, setCurrentPage] = useState<PageT>("verifyEmail");
@@ -53,12 +48,12 @@ const ModalContent = () => {
   );
 };
 
-const AuthModal: FC<AuthModalProps> = ({ visibility, setVisibility }) => {
+const AuthModal = () => {
+  const { modal, setModal } = useContext(AuthContext);
+
   return (
-    <Modal visibility={visibility} setVisibility={setVisibility}>
-      <AuthProvider>
-        <ModalContent />
-      </AuthProvider>
+    <Modal visibility={modal} setVisibility={() => setModal(false)}>
+      <ModalContent />
     </Modal>
   );
 };
