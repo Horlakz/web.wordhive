@@ -1,16 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
+import { useContext } from "react";
 
 import menu from "@/assets/icons/menu.svg";
-import navLinks from "@/store/data/nav-links.json";
 import Button from "@/components/common/Button";
+import { AuthContext } from "@/store/context/auth";
+import navLinks from "@/store/data/nav-links.json";
 import AuthModal from "../auth";
 
 const Header = () => {
   const pathname = usePathname();
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const { setModal } = useContext(AuthContext);
 
   return (
     <header className="flex justify-between items-center capitalize sm:px-16 px-8 py-4 shadow-lg">
@@ -41,17 +42,14 @@ const Header = () => {
         variant="outline"
         colorScheme="secondary"
         className="border-none hidden sm:block"
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => setModal(true)}
       >
         Sign In
       </Button>
 
       <Image src={menu} alt="menu" className="sm:hidden" />
 
-      <AuthModal
-        visibility={isModalOpen}
-        setVisibility={() => setIsModalOpen(false)}
-      />
+      <AuthModal />
     </header>
   );
 };
