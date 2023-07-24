@@ -1,9 +1,10 @@
+import { useRouter } from "next/navigation";
 import { FC, useContext } from "react";
 import { toast } from "react-hot-toast";
 
+import Button from "@/components/common/Button";
 import InputGroup from "@/components/common/InputGroup";
 import { AuthContext } from "@/store/context/auth";
-import Button from "@/components/common/Button";
 import { PageT } from "../types";
 
 interface Props {
@@ -11,10 +12,13 @@ interface Props {
 }
 
 const VerifyPassword: FC<Props> = ({ goTo }) => {
-  const { email, password, setPassword } = useContext(AuthContext);
+  const { email, password, setPassword, setModal } = useContext(AuthContext);
+  const router = useRouter();
 
   const handleSubmit = () => {
+    setModal(false);
     toast.success("Login Successful");
+    router.push("/account");
   };
 
   return (
