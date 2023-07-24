@@ -11,11 +11,13 @@ interface AuthContextType {
   otp: string;
   verificationType: VerificationType;
   message: string;
+  modal: boolean;
   setEmail: (email: string) => void;
   setPassword: (password: string) => void;
   setOtp: (otp: string) => void;
   setVerificationType: (verificationType: VerificationType) => void;
   setMessage: (message: string) => void;
+  setModal: (status: boolean) => void;
 }
 
 interface AuthProviderProps {
@@ -28,11 +30,13 @@ export const AuthContext = createContext<AuthContextType>({
   otp: "",
   verificationType: VerificationType.ConfirmEmail,
   message: "",
+  modal: false,
   setEmail: () => {},
   setPassword: () => {},
   setOtp: () => {},
   setVerificationType: () => {},
   setMessage: () => {},
+  setModal: () => {},
 });
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
@@ -43,6 +47,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     VerificationType.ConfirmEmail
   );
   const [message, setMessage] = useState("");
+  const [modal, setModal] = useState(false);
 
   const authContextValue: AuthContextType = {
     email,
@@ -50,11 +55,13 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     otp,
     verificationType,
     message,
+    modal,
     setEmail,
     setPassword,
     setOtp,
     setVerificationType,
     setMessage,
+    setModal,
   };
 
   return (
