@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import React from "react";
 import { Toaster } from "react-hot-toast";
 
+import { AuthProvider } from "@/store/context/auth";
 import Footer from "./Footer";
 import Header from "./Header";
 
@@ -15,7 +16,9 @@ function Wrapper({ children }: { children: React.ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <Toaster />
       <div>
-        <Header />
+        <AuthProvider>
+          <Header />
+        </AuthProvider>
         {children}
         <Footer />
       </div>
