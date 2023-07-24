@@ -9,6 +9,7 @@ const nextConfig = {
         pathname: "/media/**",
       },
     ],
+    domains: ["ui-avatars.com"],
   },
 };
 
