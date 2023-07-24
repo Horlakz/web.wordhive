@@ -6,6 +6,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        dashboard: "url('/images/dashboard-bg.jpg')",
+      },
       fontFamily: {
         sans: ['"Hanken Grotesk", sans-serif'],
       },
