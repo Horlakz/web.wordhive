@@ -6,7 +6,6 @@ export default class Storage {
   private TWO_DAYS_IN_SECONDS = 172800;
   private HALF_OF_A_DAY_IN_SECONDS = 43200;
   private isWindow: boolean = typeof window !== "undefined";
-  localStorage = window.localStorage;
 
   setCookie(key: string, value: CookieValueTypes) {
     return setCookie(key, value, {
@@ -27,11 +26,11 @@ export default class Storage {
   }
 
   setLocalStorage(key: string, value: string) {
-    this.isWindow && this.localStorage.setItem(key, value);
+    this.isWindow && window.localStorage.setItem(key, value);
   }
 
   getLocalStorage(key: string) {
-    return this.isWindow && this.localStorage.getItem(key);
+    return this.isWindow && window.localStorage.getItem(key);
   }
 
   checkLocalStorage(key: string) {
@@ -39,6 +38,6 @@ export default class Storage {
   }
 
   removeLocalStorage(key: string) {
-    this.isWindow && this.localStorage.removeItem(key);
+    this.isWindow && window.localStorage.removeItem(key);
   }
 }
