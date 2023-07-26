@@ -1,31 +1,46 @@
 import Storage from "@/utilities/storage";
-import axios from "axios";
-import type { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
-const storage = new Storage();
-const baseURL: string | undefined = process.env.NEXT_PUBLIC_API_URL;
-
-export class Client {
+export class Client extends Storage {
   private api: AxiosInstance;
+  private baseURL: string | undefined = process.env.NEXT_PUBLIC_API_URL;
 
   constructor(url: string) {
-    this.api = axios.create({});
+    super();
+    this.api = axios.create({
+      baseURL: `${this.baseURL}${url}`,
+      xsrfHeaderName: "X-CSRFToken",
+      responseEncoding: "utf8",
+      headers: { "Content-Type": "application/json" },
+    });
 
-    this.api.defaults.baseURL = `${baseURL}${url}`;
-    this.api.defaults.xsrfHeaderName = "X-CSRFToken";
-    this.api.defaults.responseEncoding = "utf8";
-    this.api.defaults.headers["common"]["Content-Type"] = "application/json";
-    this.api.defaults.headers["common"]["Cache-Control"] = "no-cache";
-    this.api.defaults.headers["common"]["Pragma"] = "no-cache";
-    this.api.defaults.headers["common"]["Expires"] = "0";
-
-    this.api.interceptors.request.use(function (config) {
-      config.headers.Authorization = `Bearer ${storage.getCookie("token")}`;
+    this.api.interceptors.request.use((config) => {
+      config.headers.Authorization = `Bearer ${this.getCookie("token")}`;
       return config;
     });
   }
 
-  public new(config: AxiosRequestConfig) {
+  custom(config: AxiosRequestConfig) {
     return this.api(config);
+  }
+
+  get(url: string, config?: AxiosRequestConfig) {
+    return this.custom({ method: "get", url, ...config });
+  }
+
+  post<T>(url: string, data?: T, config?: AxiosRequestConfig) {
+    return this.custom({ method: "post", url, data, ...config });
+  }
+
+  put<T>(url: string, data?: T, config?: AxiosRequestConfig) {
+    return this.custom({ method: "put", url, data, ...config });
+  }
+
+  patch<T>(url: string, data?: T, config?: AxiosRequestConfig) {
+    return this.custom({ method: "patch", url, data, ...config });
+  }
+
+  delete(url: string, config?: AxiosRequestConfig) {
+    return this.custom({ method: "delete", url, ...config });
   }
 }
