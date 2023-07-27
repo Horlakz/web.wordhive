@@ -1,8 +1,7 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
-import Image from "next/image";
 
-import rotateRightIcon from "@/assets/icons/rotate-right.svg";
+import Spinner from "./Spinner";
 
 type Variant = "solid" | "outline";
 type ColorScheme =
@@ -68,13 +67,5 @@ const Button: React.FC<ButtonProps> = ({
     </button>
   );
 };
-
-export function Spinner() {
-  return (
-    <div className="animate-spin">
-      <Image src={rotateRightIcon} alt="spinner" width={20} height={20} />
-    </div>
-  );
-}
 
 export default Button;
