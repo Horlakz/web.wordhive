@@ -33,6 +33,23 @@ const ContactPage = () => {
     {
       onSuccess: () => {
         toast.success("Message sent");
+        // Clear form data
+
+        handleChange({
+          target: { name: "fullname", value: "" },
+        } as React.ChangeEvent<HTMLInputElement>);
+        handleChange({
+          target: { name: "email", value: "" },
+        } as React.ChangeEvent<HTMLInputElement>);
+        handleChange({
+          target: { name: "phone", value: "" },
+        } as React.ChangeEvent<HTMLInputElement>);
+        handleChange({
+          target: { name: "country", value: "" },
+        } as React.ChangeEvent<HTMLInputElement>);
+        handleChange({
+          target: { name: "message", value: "" },
+        } as React.ChangeEvent<HTMLTextAreaElement>);
       },
       onError: (err: any) => {
         toast.error(
