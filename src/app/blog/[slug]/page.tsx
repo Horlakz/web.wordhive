@@ -2,12 +2,26 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import arrowLeft from "@/assets/icons/arrow-left.svg";
 import chevronLeft from "@/assets/icons/chevron-left.svg";
 import dot from "@/assets/icons/dot.svg";
 import BlogCard from "@/components/blog/Card";
-import InputGroup from "@/components/common/InputGroup";
-import Button from "@/components/common/Button";
+import { BlogService } from "@/services/blog";
+import { BlogCategoryData } from "@/services/blog/category";
+import { BlogCommentData, BlogCommentService } from "@/services/blog/comment";
+import { formatDate } from "@/utilities/date";
+import { Key } from "react";
+import PostComment from "./PostComment";
+
+const blogService = new BlogService();
+const blogCommentService = new BlogCommentService();
+
+interface BlogData {
+  title: string;
+  slug: string;
+  category: BlogCategoryData;
+  body: string;
+  created_at: string;
+}
 
 interface Params {
   params: {
@@ -15,8 +29,18 @@ interface Params {
   };
 }
 
-const ViewBlog: NextPage<Params> = ({ params }) => {
+const ViewBlog: NextPage<Params> = async ({ params }) => {
   const { slug } = params;
+
+  const blogData = blogService.getBlog(slug);
+  const blogsData = blogService.listBlog();
+  const commentsData = blogCommentService.listBlogComment(slug);
+
+  const [blog, blogs, comments] = await Promise.all([
+    blogData,
+    blogsData,
+    commentsData,
+  ]);
 
   const startOfYear = new Date(new Date().getFullYear(), 0, 1).getTime();
   const currentDate = new Date().getTime();
@@ -39,63 +63,32 @@ const ViewBlog: NextPage<Params> = ({ params }) => {
         </Link>
 
         <h2 className="sm:text-4xl text-2xl text-primary font-bold">
-          Blog Title with slug: {slug}
+          {blog.data.title}
         </h2>
 
         <div className="flex items-center font-semibold text-[#B1B1B1]">
-          <span>Category</span>
+          <span>{blog.data.category.name}</span>
           <Image src={dot} alt="dot" width={4} height={4} className="mx-2" />
-          <span>{randomDate}</span>
+          <span>{formatDate(blog.data.created_at)}</span>
         </div>
 
-        <p className="text-dark-600 leading-loose">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi
-          voluptatem id dolorem nesciunt consequuntur quasi alias adipisci
-          dolorum deserunt placeat ea quibusdam velit distinctio qui
-          perspiciatis amet officia optio, iusto impedit ipsum totam aliquid
-          quaerat architecto earum. Fugiat consequuntur error aperiam quisquam
-          ex, odio distinctio cum nihil ab, ratione illum! Molestias nihil animi
-          aspernatur pariatur expedita provident distinctio exercitationem
-          quaerat, laborum recusandae optio quo cumque ab quisquam, adipisci
-          saepe hic delectus praesentium! Voluptatibus repellendus fugiat minus
-          consequatur tempore ipsam illum nulla ex, ullam vitae quis ab,
-          veritatis doloremque facilis impedit iste! Eaque, animi aut
-          perspiciatis numquam ratione ipsa eligendi quod nobis culpa
-          voluptatem. Sit excepturi possimus pariatur dolorum aliquid minus
-          incidunt tempore nulla vel blanditiis deleniti molestiae doloremque
-          esse odit vero numquam et obcaecati, nisi nostrum animi! Dignissimos
-          officiis deserunt est. Et exercitationem quod reprehenderit quasi
-          inventore velit porro repudiandae mollitia magnam molestias alias
-          autem atque itaque dicta est eum natus dolorem molestiae saepe
-          voluptas provident sunt, id hic! Corporis nostrum amet, hic eveniet,
-          blanditiis, odit dolorem animi natus commodi ab non corrupti magni
-          eius repellat beatae? Ad magnam quidem placeat. Nisi blanditiis
-          dignissimos laborum corporis similique atque eaque, voluptatum magni
-          eligendi quos commodi, quae amet? Eaque facilis consequatur ex?
-        </p>
+        <p className="text-dark-600 leading-loose">{blog.data.body}</p>
 
         <div className="space-y-4">
           <h3 className="text-xl text-primary font-semibold">Comments</h3>
 
           <div>
-            {[...new Array(5)].map((_, i) => (
+            {comments.data.map((comment: BlogCommentData, i: Key) => (
               <div key={i}>
                 <span className="font-semibold text-lg">
-                  Firstname Lastname
+                  {comment.fullname}
                 </span>
-                <p>
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                  Necessitatibus mollitia, omnis harum aliquam et quisquam?
-                </p>
+                <p>{comment.message}</p>
               </div>
             ))}
           </div>
 
-          <form className="space-y-4">
-            <InputGroup.Input label="Your Name" placeholder="Enter your name" />
-            <InputGroup.TextArea label="Message" />
-            <Button>Post Comment</Button>
-          </form>
+          <PostComment slug={slug} />
         </div>
       </section>
 
@@ -106,29 +99,15 @@ const ViewBlog: NextPage<Params> = ({ params }) => {
       <section className="sm:grid hidden gap-4 border-t-4 border-primary w-2/5 py-5">
         <h2 className="font-semibold text-2xl text-primary">Latest Blogs</h2>
 
-        {[...new Array(4)].map((blog, i) => {
-          const startOfYear = new Date(
-            new Date().getFullYear(),
-            0,
-            1
-          ).getTime();
-          const currentDate = new Date().getTime();
-          const randomDate = new Date(
-            startOfYear + Math.random() * (currentDate - startOfYear)
-          ).toLocaleDateString("en-US", {
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-          });
-
+        {blogs.data.map((blog: BlogData, i: Key) => {
           return (
             <BlogCard
               key={i}
-              title={"Blog Title " + Number(i + 1)}
-              slug={i.toLocaleString()}
-              body=""
-              category="Category"
-              date={randomDate}
+              title={blog.title}
+              slug={blog.slug}
+              body={blog.body}
+              category={blog.category.name}
+              date={formatDate(blog.created_at)}
             />
           );
         })}
