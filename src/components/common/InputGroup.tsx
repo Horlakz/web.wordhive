@@ -10,6 +10,7 @@ interface InputProps<T = HTMLInputElement> {
   label: string;
   type?: HTMLInputElement["type"];
   placeholder?: string;
+  name?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<T>) => void;
 }
@@ -30,6 +31,7 @@ function Input({
   type = "text",
   placeholder,
   value,
+  name,
   onChange,
 }: InputProps) {
   const id = label.toLowerCase().replace(" ", "_");
@@ -45,6 +47,7 @@ function Input({
       <input
         type={type}
         id={id}
+        name={name || id}
         className="bg-gray-50 border border-gray-300 text-dark-900 text-sm rounded-lg focus:ring-2 focus:ring-primary focus:outline-0 block w-full p-2.5"
         placeholder={placeholder ? placeholder : `Enter your ${label}`}
         onChange={onChange}
@@ -60,6 +63,7 @@ function TextArea({
   placeholder,
   rows = 4,
   value,
+  name,
   onChange,
 }: TextAreaProps) {
   const id = label.toLowerCase().replace(" ", "_");
@@ -74,6 +78,7 @@ function TextArea({
       </label>
       <textarea
         id={id}
+        name={name || id}
         rows={rows}
         className="block p-2.5 w-full text-sm text-dark-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:outline-0"
         placeholder={placeholder ? placeholder : `Enter your ${label}`}
@@ -90,6 +95,7 @@ function Select({
   options,
   defaultOption,
   value,
+  name,
   onChange,
 }: SelectProps) {
   function ConvertLabelToDefaultOption(text: string) {
@@ -103,16 +109,19 @@ function Select({
     return `Choose a ${textToLowercase}`;
   }
 
+  const id = label.toLowerCase().replace(" ", "_");
+
   return (
     <div className={className}>
       <label
-        htmlFor="countries"
+        htmlFor={id}
         className="block mb-2 text-sm font-medium text-gray-900"
       >
         {label}
       </label>
       <select
-        id="countries"
+        id={id}
+        name={name || id}
         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 "
         value={value}
         onChange={onChange}
