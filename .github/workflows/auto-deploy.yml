@@ -12,7 +12,7 @@ jobs:
       - name: Generate .env file
         uses: SpicyPizza/create-envfile@v1.3
         with:
-          envkey_CORS_ORIGIN: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          envkey_NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
       - name: Build Docker images
         run: |
