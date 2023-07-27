@@ -1,13 +1,22 @@
 "use client";
 
-import React from "react";
+import { useEffect } from "react";
 
-const ErrorPage = () => {
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  useEffect(() => {
+    console.error(error);
+  }, [error]);
+
   return (
     <div>
-      <p>An Error Occured While Trying to Get this Page</p>
+      <h2>Something went wrong!</h2>
+      <button onClick={() => reset()}>Try again</button>
     </div>
   );
-};
-
-export default ErrorPage;
+}
