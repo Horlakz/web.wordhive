@@ -9,7 +9,7 @@ const nextConfig = {
         pathname: "/media/**",
       },
     ],
-    domains: ["ui-avatars.com"],
+    domains: ["ui-avatars.com", "api.wordhive.horlakz.com", "localhost"],
   },
 };
 
