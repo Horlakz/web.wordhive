@@ -15,6 +15,10 @@ export class BlogService extends Client {
     return this.get("");
   }
 
+  getBlog(slug: string) {
+    return this.get(slug);
+  }
+
   createBlog(data: BlogData) {
     return this.post<BlogData>("", data);
   }
