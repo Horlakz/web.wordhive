@@ -1,43 +1,53 @@
-import BlogCard from "@/components/blog/Card";
+import { Key } from "react";
 
-const Blog = () => {
+import BlogCard from "@/components/blog/Card";
+import { BlogService } from "@/services/blog";
+import {
+  BlogCategoryData,
+  BlogCategoryService,
+} from "@/services/blog/category";
+import { formatDate } from "@/utilities/date";
+
+const blogService = new BlogService();
+const blogCategoryService = new BlogCategoryService();
+
+interface BlogData {
+  title: string;
+  slug: string;
+  category: BlogCategoryData;
+  body: string;
+  created_at: string;
+}
+
+const Blog = async () => {
+  const blogData = blogService.listBlog();
+  const categoriesData = blogCategoryService.listBlogCategory();
+
+  const [blogs, categories] = await Promise.all([blogData, categoriesData]);
+
   return (
     <main className="py-5 sm:px-20 px-8">
       <section className="flex-center flex-wrap gap-5">
-        {Array.from({ length: 6 }).map((_, i) => (
+        {categories?.data.map((category: BlogCategoryData, i: Key) => (
           <span
             key={i}
             className="text-lg text-dark-600 hover:text-secondary default-transition cursor-pointer"
           >
-            Category
+            {category.name}
           </span>
         ))}
       </section>
 
       <section className="grid sm:grid-cols-3 gap-10 py-5">
-        {[...new Array(10)].map((blog, i) => {
-          const startOfYear = new Date(
-            new Date().getFullYear(),
-            0,
-            1
-          ).getTime();
-          const currentDate = new Date().getTime();
-          const randomDate = new Date(
-            startOfYear + Math.random() * (currentDate - startOfYear)
-          ).toLocaleDateString("en-US", {
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-          });
-
+        {blogs.data.map((blog: BlogData, i: Key) => {
           return (
             <BlogCard
               key={i}
-              title={"Blog Title " + Number(i + 1)}
-              slug={i.toLocaleString()}
-              body=""
-              category="Category"
-              date={randomDate}
+              title={blog.title}
+              slug={blog.slug}
+              body={blog.body}
+              category={blog.category?.name}
+              date={formatDate(blog.created_at)}
             />
           );
         })}
