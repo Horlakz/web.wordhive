@@ -5,6 +5,7 @@ import success from "@/assets/icons/success.svg";
 import { PortfolioData, PortfolioService } from "@/services/portfolio";
 
 const portfolioService = new PortfolioService();
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const Portfolio = async () => {
   const { data } = await portfolioService.listPortfolios();
@@ -14,7 +15,7 @@ const Portfolio = async () => {
       {data.results.map((portfolio: PortfolioData, i: Key) => (
         <div key={i} className="border-2 rounded-2xl p-4">
           <Image
-            src={"http://localhost:8000/v1/media/" + portfolio.image}
+            src={apiUrl + "/media/" + portfolio.image}
             width={250}
             height={250}
             alt={portfolio.title}
