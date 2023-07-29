@@ -37,7 +37,14 @@ function Details({ title, image, body, volumes, price, setPrice }: Props) {
 
       <InputGroup.Select
         label="Select Service Quality"
-        onChange={(e) => setSelectedQuality(e.target.value)}
+        onChange={(e) => {
+          setSelectedQuality(e.target.value);
+          // set the price to the first quality of the selected volume or use the default price
+          setPrice(
+            volumes.find((vol) => vol.name === e.target.value)?.qualities[0]
+              .price || volumes[0].qualities[0].price
+          );
+        }}
         options={volumes.slice(1).map((vol) => {
           return {
             label: vol.name,
