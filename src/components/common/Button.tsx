@@ -57,11 +57,11 @@ const Button: React.FC<ButtonProps> = ({
       )}
       onClick={onClick}
     >
-      {icon && iconPosition === "left" && (
+      {isIcon && iconPosition === "left" && (
         <span className="mr-2">{isIcon}</span>
       )}
       {children}
-      {icon && iconPosition === "right" && (
+      {isIcon && iconPosition === "right" && (
         <span className="ml-2">{isIcon}</span>
       )}
     </button>
