@@ -5,7 +5,7 @@ import React from "react";
 
 import Button from "@/components/common/Button";
 import Modal from "@/components/common/Modal";
-import Details from "./Details";
+import Order from "./Order";
 
 interface Quality {
   type: string;
@@ -26,7 +26,7 @@ export interface CardProps {
 
 function ServiceCard({ image, title, body, volumes }: CardProps) {
   const [showModal, setShowModal] = React.useState(false);
-  const [price, setPrice] = React.useState(volumes[0].qualities[0].price);
+  const price = volumes[0].qualities[0].price;
 
   return (
     <>
@@ -55,14 +55,7 @@ function ServiceCard({ image, title, body, volumes }: CardProps) {
       </div>
 
       <Modal visibility={showModal} setVisibility={() => setShowModal(false)}>
-        <Details
-          price={price}
-          setPrice={setPrice}
-          image={image}
-          title={title}
-          body={body}
-          volumes={volumes}
-        />
+        <Order image={image} title={title} body={body} volumes={volumes} />
       </Modal>
     </>
   );

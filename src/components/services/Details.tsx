@@ -1,25 +1,30 @@
-import React from "react";
 import Image from "next/image";
 
 import InputGroup from "@/components/common/InputGroup";
-import Button from "@/components/common/Button";
 import { CardProps } from "./Card";
 
-interface Props extends CardProps {
+interface Data extends CardProps {
   price: number;
-  setPrice: (price: number) => void;
+  selectedQuality: string;
 }
 
-function Details({ title, image, body, volumes, price, setPrice }: Props) {
-  const [selectedQuality, setSelectedQuality] = React.useState<string>(
-    volumes[0].name
-  );
+interface Props extends Data {
+  updateFields: (fields: Partial<Data>) => void;
+}
 
+function Details({
+  title,
+  image,
+  body,
+  volumes,
+  selectedQuality,
+  updateFields,
+}: Props) {
   const qualities =
     volumes.find((vol) => vol.name === selectedQuality)?.qualities || [];
 
   return (
-    <div aria-label="modal" className="sm:p-10 p-4 sm:w-[40rem] space-y-4">
+    <div aria-label="modal" className="sm:p-10 py-4 sm:w-[40rem] space-y-4">
       <div className="flex sm:flex-row flex-col sm:items-center gap-6">
         <Image
           src={image}
@@ -36,14 +41,15 @@ function Details({ title, image, body, volumes, price, setPrice }: Props) {
       </div>
 
       <InputGroup.Select
-        label="Select Service Quality"
+        label="Select Volume(Pages)"
         onChange={(e) => {
-          setSelectedQuality(e.target.value);
+          updateFields({ selectedQuality: e.target.value });
           // set the price to the first quality of the selected volume or use the default price
-          setPrice(
-            volumes.find((vol) => vol.name === e.target.value)?.qualities[0]
-              .price || volumes[0].qualities[0].price
-          );
+          updateFields({
+            price:
+              volumes.find((vol) => vol.name === e.target.value)?.qualities[0]
+                .price || volumes[0].qualities[0].price,
+          });
         }}
         options={volumes.slice(1).map((vol) => {
           return {
@@ -54,8 +60,8 @@ function Details({ title, image, body, volumes, price, setPrice }: Props) {
         defaultOption={{ label: volumes[0].name, value: volumes[0].name }}
       />
       <InputGroup.Select
-        label="Select Volume(Pages)"
-        onChange={(e) => setPrice(Number(e.target.value))}
+        label="Select Service Quality"
+        onChange={(e) => updateFields({ price: Number(e.target.value) })}
         options={
           qualities?.slice(1).map((qual) => {
             return {
@@ -69,17 +75,6 @@ function Details({ title, image, body, volumes, price, setPrice }: Props) {
           value: qualities[0].price.toLocaleString(),
         }}
       />
-
-      <div className="flex items-center gap-2 w-full">
-        <div className="flex justify-between items-center bg-[#f5f5f5] text-lg font-semibold px-3 py-2 w-full rounded-lg">
-          <span>Price</span>
-          <span className="text-secondary">${price}</span>
-        </div>
-
-        <Button colorScheme="secondary" className="w-full flex-center">
-          Pay Now
-        </Button>
-      </div>
     </div>
   );
 }
