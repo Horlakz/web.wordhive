@@ -1,0 +1,39 @@
+$inactive: #45a6dd;
+$active: #FF6900;
+
+.ms-form-progress {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  place-items: center;
+  gap: 6rem;
+
+  span {
+    background-color: $inactive;
+    padding: 0.35rem 1rem;
+    border-radius: 9999px;
+    border: 4px solid white;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: $inactive;
+  }
+
+  span:not(:last-of-type)::after {
+    content: "";
+    position: absolute;
+    top: 1.5rem;
+    border-top: 2px dotted $inactive;
+    width: 8.5rem;
+    height: 1rem;
+  }
+
+  span.active::after {
+    border-top: solid $active;
+  }
+
+  span.active {
+    padding: 0.4rem;
+    background-color: $active;
+    color: $active;
+  }
+}
