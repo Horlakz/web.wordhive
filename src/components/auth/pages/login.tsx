@@ -8,6 +8,7 @@ import InputGroup from "@/components/common/InputGroup";
 import { AuthContext } from "@/store/context/auth";
 import { PageT } from "../types";
 import { AuthService } from "@/services/auth";
+import { VerificationType } from "@/store/context/auth";
 
 const authService = new AuthService();
 
@@ -16,8 +17,14 @@ interface Props {
 }
 
 const VerifyPassword: FC<Props> = ({ goTo }) => {
-  const { email, password, setEmail, setPassword, setModal } =
-    useContext(AuthContext);
+  const {
+    email,
+    password,
+    setEmail,
+    setPassword,
+    setVerificationType,
+    setModal,
+  } = useContext(AuthContext);
   const router = useRouter();
 
   const handleSubmit = () => {
@@ -42,6 +49,11 @@ const VerifyPassword: FC<Props> = ({ goTo }) => {
         authService.setCookie("access", res.data.access_token);
       },
       onError: (err: any) => {
+        if (err.response.data.message == "Email is not verified") {
+          setVerificationType(VerificationType.ConfirmEmail);
+          goTo("verification");
+        }
+
         toast.error(err.response.data.message);
       },
     }
