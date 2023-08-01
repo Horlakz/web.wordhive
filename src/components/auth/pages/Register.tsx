@@ -1,9 +1,14 @@
 import { useContext, FC, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 
 import { PageT } from "../types";
 import Button from "@/components/common/Button";
 import { AuthContext, VerificationType } from "@/store/context/auth";
 import InputGroup from "@/components/common/InputGroup";
+import { AuthService } from "@/services/auth";
+import { toast } from "react-hot-toast";
+
+const authService = new AuthService();
 
 interface RegisterProps {
   goTo: (page: PageT) => void;
@@ -15,9 +20,40 @@ const Register: FC<RegisterProps> = ({ goTo }) => {
   const [fullName, setFullName] = useState("");
 
   const handleSubmit = () => {
-    setVerificationType(VerificationType.ConfirmEmail);
-    goTo("verification");
+    switch (true) {
+      case !fullName:
+        toast.error("Full Name is required");
+        break;
+      case !email:
+        toast.error("Email is required");
+        break;
+      case !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email):
+        toast.error("Email is invalid");
+        break;
+      case !password:
+        toast.error("Password is required");
+        break;
+      default:
+        setVerificationType(VerificationType.ConfirmEmail);
+        mutate();
+    }
   };
+
+  const { mutate, isLoading } = useMutation(
+    async () =>
+      await authService.register({ fullname: fullName, email, password }),
+    {
+      onSuccess: () => {
+        toast.success("Registration Successful");
+        setPassword("");
+        setFullName("");
+        goTo("verification");
+      },
+      onError: (err: any) => {
+        toast.error(err.response.data.message);
+      },
+    }
+  );
 
   return (
     <div className="grid center gap-8 py-16">
@@ -50,7 +86,11 @@ const Register: FC<RegisterProps> = ({ goTo }) => {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <Button className="flex-center" onClick={handleSubmit}>
+        <Button
+          className="flex-center"
+          isLoading={isLoading}
+          onClick={handleSubmit}
+        >
           Register
         </Button>
 
