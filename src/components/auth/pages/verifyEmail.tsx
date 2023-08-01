@@ -14,7 +14,16 @@ const Login: FC<LoginProps> = ({ goTo }) => {
   const { email, setEmail } = useContext(AuthContext);
 
   const handleSubmit = () => {
-    toast.success("Login Successful");
+    switch (true) {
+      case !email:
+        toast.error("Email is required");
+        break;
+      case !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email):
+        toast.error("Email is not valid");
+        break;
+      default:
+        goTo("login");
+    }
   };
 
   return (
@@ -42,7 +51,7 @@ const Login: FC<LoginProps> = ({ goTo }) => {
           Forgot Password?
         </Button>
 
-        <Button className="flex-center" onClick={() => goTo("login")}>
+        <Button className="flex-center" onClick={() => handleSubmit()}>
           Proceed
         </Button>
 
