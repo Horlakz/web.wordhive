@@ -40,9 +40,9 @@ const Button: React.FC<ButtonProps> = ({
   const getVariantClasses = () => {
     switch (variant) {
       case "outline":
-        return `border-2 border-${colorScheme} text-${colorScheme} bg-transparent`;
+        return `border-2 border-${colorScheme} text-${colorScheme} bg-transparent default-transition`;
       default:
-        return `bg-${colorScheme} text-white`;
+        return `bg-${colorScheme} text-white hover:bg-opacity-80 default-transition`;
     }
   };
 
