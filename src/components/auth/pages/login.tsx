@@ -1,11 +1,15 @@
 import { useRouter } from "next/navigation";
 import { FC, useContext } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 
 import Button from "@/components/common/Button";
 import InputGroup from "@/components/common/InputGroup";
 import { AuthContext } from "@/store/context/auth";
 import { PageT } from "../types";
+import { AuthService } from "@/services/auth";
+
+const authService = new AuthService();
 
 interface Props {
   goTo: (page: PageT) => void;
@@ -16,10 +20,29 @@ const VerifyPassword: FC<Props> = ({ goTo }) => {
   const router = useRouter();
 
   const handleSubmit = () => {
-    setModal(false);
-    toast.success("Login Successful");
-    router.push("/account");
+    switch (true) {
+      case !password:
+        toast.error("Password is required");
+        break;
+      default:
+        mutate();
+    }
   };
+
+  const { mutate, isLoading } = useMutation(
+    async () => await authService.login({ email, password }),
+    {
+      onSuccess: (res) => {
+        toast.success("Login Successful");
+        router.push("/account");
+        setModal(false);
+        authService.setCookie("access", res.data.access_token);
+      },
+      onError: (err: any) => {
+        toast.error(err.response.data.message);
+      },
+    }
+  );
 
   return (
     <div className="grid center gap-4 py-16">
@@ -60,7 +83,11 @@ const VerifyPassword: FC<Props> = ({ goTo }) => {
           Forgot Password?
         </Button>
 
-        <Button className="flex-center" onClick={handleSubmit}>
+        <Button
+          className="flex-center"
+          isLoading={isLoading}
+          onClick={handleSubmit}
+        >
           Login
         </Button>
 
