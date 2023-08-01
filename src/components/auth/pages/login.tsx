@@ -16,7 +16,8 @@ interface Props {
 }
 
 const VerifyPassword: FC<Props> = ({ goTo }) => {
-  const { email, password, setPassword, setModal } = useContext(AuthContext);
+  const { email, password, setEmail, setPassword, setModal } =
+    useContext(AuthContext);
   const router = useRouter();
 
   const handleSubmit = () => {
@@ -35,6 +36,8 @@ const VerifyPassword: FC<Props> = ({ goTo }) => {
       onSuccess: (res) => {
         toast.success("Login Successful");
         router.push("/account");
+        setEmail("");
+        setPassword("");
         setModal(false);
         authService.setCookie("access", res.data.access_token);
       },
