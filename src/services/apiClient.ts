@@ -15,7 +15,7 @@ export class Client extends Storage {
     });
 
     this.api.interceptors.request.use((config) => {
-      config.headers.Authorization = `Bearer ${this.getCookie("token")}`;
+      config.headers.Authorization = `Bearer ${this.getCookie("access")}`;
       return config;
     });
   }
