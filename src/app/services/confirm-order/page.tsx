@@ -22,7 +22,7 @@ const ConfirmServiceOrderPage: FC<Props> = async ({ searchParams }) => {
 
   return (
     <main className="py-5 sm:px-20 px-8">
-      <section className="flex-center flex-wrap gap-5 sm:p-20 p-10">
+      <section className="flex flex-col center gap-5 sm:p-20 p-10">
         <span className="text-xl text-center text-dark-600 hover:text-secondary default-transition cursor-pointer">
           {data.status == "success" ? message.success : message.failed}
         </span>
