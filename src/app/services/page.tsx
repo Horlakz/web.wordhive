@@ -50,6 +50,7 @@ const ServicesPage = async () => {
       <section className="grid sm:grid-cols-3 gap-10 py-5">
         {services.data.map((service: ServicesData) => (
           <ServiceCard
+            id={service.uuid}
             key={service.uuid}
             image={dummy}
             title={service.title}
