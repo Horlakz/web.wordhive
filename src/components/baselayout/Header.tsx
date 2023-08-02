@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useContext } from "react";
 
 import menu from "@/assets/icons/menu.svg";
@@ -8,9 +8,13 @@ import Button from "@/components/common/Button";
 import { AuthContext } from "@/store/context/auth";
 import navLinks from "@/store/data/nav-links.json";
 import AuthModal from "../auth";
+import Storage from "@/utilities/storage";
 
 const Header = () => {
+  const router = useRouter();
   const pathname = usePathname();
+  const storage = new Storage();
+  const isAuth = storage.checkCookie("access");
   const { setModal } = useContext(AuthContext);
 
   return (
@@ -38,14 +42,29 @@ const Header = () => {
         </ul>
       </nav>
 
-      <Button
-        variant="outline"
-        colorScheme="secondary"
-        className="border-none hidden sm:block"
-        onClick={() => setModal(true)}
-      >
-        Sign In
-      </Button>
+      <div className="flex items-center">
+        {isAuth && (
+          <Link href="/account" className="text-secondary">
+            Account
+          </Link>
+        )}
+
+        <Button
+          variant="outline"
+          colorScheme="danger"
+          className="border-none hidden sm:block"
+          onClick={() => {
+            if (isAuth) {
+              storage.removeCookie("access");
+              router.push("/");
+            } else {
+              setModal(true);
+            }
+          }}
+        >
+          {isAuth ? "Logout" : "Login"}
+        </Button>
+      </div>
 
       <Image src={menu} alt="menu" className="sm:hidden" />
 
