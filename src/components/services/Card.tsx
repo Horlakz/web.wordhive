@@ -18,13 +18,14 @@ interface Volume {
 }
 
 export interface CardProps {
+  id: string;
   image: string | StaticImageData;
   title: string;
   body: string;
   volumes: Volume[];
 }
 
-function ServiceCard({ image, title, body, volumes }: CardProps) {
+function ServiceCard({ id, image, title, body, volumes }: CardProps) {
   const [showModal, setShowModal] = React.useState(false);
   const price = volumes[0].qualities[0].price;
 
@@ -55,7 +56,13 @@ function ServiceCard({ image, title, body, volumes }: CardProps) {
       </div>
 
       <Modal visibility={showModal} setVisibility={() => setShowModal(false)}>
-        <Order image={image} title={title} body={body} volumes={volumes} />
+        <Order
+          id={id}
+          image={image}
+          title={title}
+          body={body}
+          volumes={volumes}
+        />
       </Modal>
     </>
   );

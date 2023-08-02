@@ -4,7 +4,7 @@ import { CardProps } from "./Card";
 
 interface Props extends CardProps {
   price: number;
-  selectedQuality: string;
+  selectedVolume: string;
 }
 
 function Review({
@@ -12,11 +12,11 @@ function Review({
   image,
   body,
   volumes,
-  selectedQuality,
+  selectedVolume,
   price,
-}: Props) {
+}: Omit<Props, "id">) {
   const qualities =
-    volumes.find((vol) => vol.name === selectedQuality)?.qualities || [];
+    volumes.find((vol) => vol.name === selectedVolume)?.qualities || [];
 
   // get quality type from price
   const qualityType = qualities.find((qual) => qual.price === price)?.type;
@@ -41,9 +41,7 @@ function Review({
       <div className="flex sm:flex-row flex-col justify-between items-center gap-4">
         <div className="">
           <span className="text-dark-600">Volume(Pages): </span>
-          <span className="text-secondary font-semibold">
-            {selectedQuality}
-          </span>
+          <span className="text-secondary font-semibold">{selectedVolume}</span>
         </div>
 
         <div className="">

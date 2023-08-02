@@ -1,33 +1,39 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 import Button from "@/components/common/Button";
 import useMultiStepForm from "@/hooks/useMultiStepForm";
 import { CardProps } from "./Card";
 import Details from "./Details";
 import Review from "./Review";
+import { OrderService } from "@/services/order";
 
 interface Props extends CardProps {}
 
-interface FormData extends Props {
+interface FormData extends Omit<Props, "id"> {
   price: number;
-  selectedQuality: string;
+  selectedVolume: string;
 }
 
-const Order = ({ title, image, body, volumes }: Props) => {
+const Order = ({ id, title, image, body, volumes }: Props) => {
+  const router = useRouter();
+  const orderService = new OrderService();
+  const isAuth = orderService.checkCookie("access");
   const INITIAL_DATA: FormData = {
     title,
     image,
     body,
     volumes,
     price: volumes[0].qualities[0].price,
-    selectedQuality: volumes[0].name,
+    selectedVolume: volumes[0].name,
   };
 
   const [formData, setFormData] = useState<FormData>(INITIAL_DATA);
 
   const qualityType = volumes
-    .find((vol) => vol.name === formData.selectedQuality)
+    .find((vol) => vol.name === formData.selectedVolume)
     ?.qualities.find((qual) => qual.price === formData.price)?.type;
 
   const updateFields = (fields: Partial<FormData>) => {
@@ -42,13 +48,35 @@ const Order = ({ title, image, body, volumes }: Props) => {
 
   const { currentStep, currentStepIndex, nextStep, firstStep, isLastStep } =
     useMultiStepForm(steps);
-
   const firstStepDone = currentStepIndex >= 1;
   const isFirstStep = currentStepIndex === 0;
 
-  const handleSubmit = async () => {
-    toast(qualityType || "undefined");
+  const apiData = {
+    serviceId: id,
+    serviceQuality: qualityType || volumes[0].qualities[0].type,
+    serviceVolume: formData.selectedVolume,
   };
+
+  const handleSubmit = async () => {
+    if (!isAuth) {
+      toast.error("You need to be logged in to order a service");
+      return;
+    }
+
+    mutate();
+  };
+
+  const { mutate, isLoading } = useMutation(
+    async () => await orderService.createOrder(apiData),
+    {
+      onSuccess: (res) => {
+        router.push(res.data?.payment_link);
+      },
+      onError: (error: any) => {
+        toast.error(error?.response?.data?.message);
+      },
+    }
+  );
 
   return (
     <div className="mt-6">
@@ -75,9 +103,8 @@ const Order = ({ title, image, body, volumes }: Props) => {
         <Button
           colorScheme="secondary"
           className="w-full flex-center"
+          isLoading={isLoading}
           onClick={() => (isLastStep ? handleSubmit() : nextStep())}
-          //   disabled={isLoading || uploadToAWS.isLoading}
-          //   isLoading={isLoading || uploadToAWS.isLoading}
         >
           {isLastStep ? "Pay Now" : "Review Order"}
         </Button>

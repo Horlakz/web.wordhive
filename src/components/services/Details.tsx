@@ -3,9 +3,9 @@ import Image from "next/image";
 import InputGroup from "@/components/common/InputGroup";
 import { CardProps } from "./Card";
 
-interface Data extends CardProps {
+interface Data extends Omit<CardProps, "id"> {
   price: number;
-  selectedQuality: string;
+  selectedVolume: string;
 }
 
 interface Props extends Data {
@@ -17,11 +17,11 @@ function Details({
   image,
   body,
   volumes,
-  selectedQuality,
+  selectedVolume,
   updateFields,
 }: Props) {
   const qualities =
-    volumes.find((vol) => vol.name === selectedQuality)?.qualities || [];
+    volumes.find((vol) => vol.name === selectedVolume)?.qualities || [];
 
   return (
     <div aria-label="modal" className="sm:p-10 py-4 sm:w-[40rem] space-y-4">
@@ -43,7 +43,7 @@ function Details({
       <InputGroup.Select
         label="Select Volume(Pages)"
         onChange={(e) => {
-          updateFields({ selectedQuality: e.target.value });
+          updateFields({ selectedVolume: e.target.value });
           // set the price to the first quality of the selected volume or use the default price
           updateFields({
             price:
