@@ -18,4 +18,8 @@ export class OrderService extends Client {
   createOrder(data: OrderData) {
     return this.post<OrderData>("", data);
   }
+
+  verifyOrder(payment_reference: string) {
+    return this.get(`verify/${payment_reference}`);
+  }
 }
