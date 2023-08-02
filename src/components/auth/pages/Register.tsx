@@ -44,7 +44,9 @@ const Register: FC<RegisterProps> = ({ goTo }) => {
       await authService.register({ fullname: fullName, email, password }),
     {
       onSuccess: () => {
-        toast.success("Registration Successful");
+        toast.success(
+          "Registration Successful, Check your email for verification code"
+        );
         setPassword("");
         setFullName("");
         goTo("verification");

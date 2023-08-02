@@ -1,17 +1,22 @@
 import { FC, useContext, useState } from "react";
 import { toast } from "react-hot-toast";
+import { useMutation } from "@tanstack/react-query";
 
 import Button from "@/components/common/Button";
 import InputGroup from "@/components/common/InputGroup";
 import { AuthContext } from "@/store/context/auth";
 import { PageT } from "../types";
+import { AuthService } from "@/services/auth";
+
+const authService = new AuthService();
 
 interface ForgotPasswordProps {
   goTo: (page: PageT) => void;
 }
 
 const ResetPassword: FC<ForgotPasswordProps> = ({ goTo }) => {
-  const { email, password, setPassword, setMessage } = useContext(AuthContext);
+  const { email, password, otp, setPassword, setMessage } =
+    useContext(AuthContext);
   const [newPassword, setNewPassword] = useState("");
 
   const handleSubmit = () => {
@@ -20,11 +25,21 @@ const ResetPassword: FC<ForgotPasswordProps> = ({ goTo }) => {
       return;
     }
 
-    goTo("success");
-    setMessage(
-      "Password Reset Successful! You can now sign in to your account using your newly created password"
-    );
+    mutate();
   };
+
+  const { mutate, isLoading } = useMutation(
+    async () => await authService.resetPassword({ email, code: otp, password }),
+    {
+      onSuccess: () => {
+        goTo("success");
+        setMessage(
+          "Password Reset Successful! You can now sign in to your account using your newly created password"
+        );
+      },
+      onError: (err: any) => toast.error(err?.response?.data?.message),
+    }
+  );
 
   return (
     <div className="grid center gap-6 py-16">
@@ -53,7 +68,11 @@ const ResetPassword: FC<ForgotPasswordProps> = ({ goTo }) => {
           onChange={(e) => setNewPassword(e.target.value)}
         />
 
-        <Button className="flex-center" onClick={handleSubmit}>
+        <Button
+          className="flex-center"
+          isLoading={isLoading}
+          onClick={handleSubmit}
+        >
           Create New Password
         </Button>
       </form>

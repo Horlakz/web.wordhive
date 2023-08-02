@@ -1,21 +1,47 @@
 import { FC, useContext } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
 
 import InputGroup from "@/components/common/InputGroup";
 import { AuthContext, VerificationType } from "@/store/context/auth";
 import Button from "@/components/common/Button";
 import { PageT } from "../types";
+import { AuthService } from "@/services/auth";
+
+const authService = new AuthService();
 
 interface ForgotPasswordProps {
   goTo: (page: PageT) => void;
 }
 
 const ForgotPassword: FC<ForgotPasswordProps> = ({ goTo }) => {
-  const { email, setEmail, setVerificationType } = useContext(AuthContext);
+  const { email, setEmail, setPassword, setVerificationType } =
+    useContext(AuthContext);
 
   const handleSubmit = () => {
-    // TODO: Implement submit logic
-    console.log("OTP submitted:", email);
+    switch (true) {
+      case email === "":
+        toast.error("Email is required");
+        break;
+      case !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email):
+        toast.error("Email is invalid");
+        break;
+      default:
+        mutate();
+    }
   };
+
+  const { mutate, isLoading } = useMutation(
+    async () => await authService.forgotPassword(email),
+    {
+      onSuccess: () => {
+        goTo("verification");
+        setVerificationType(VerificationType.ForgotPassword);
+        setPassword("");
+      },
+      onError: (err: any) => toast.error(err?.response?.data?.message),
+    }
+  );
 
   return (
     <div className="grid center gap-6 py-16">
@@ -40,10 +66,8 @@ const ForgotPassword: FC<ForgotPasswordProps> = ({ goTo }) => {
 
         <Button
           className="flex-center"
-          onClick={() => {
-            setVerificationType(VerificationType.ForgotPassword);
-            goTo("verification");
-          }}
+          isLoading={isLoading}
+          onClick={handleSubmit}
         >
           Send OTP
         </Button>
