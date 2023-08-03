@@ -1,22 +1,127 @@
-import React from "react";
+import { useState } from "react";
+import { twMerge } from "tailwind-merge";
 
-function OrderCard() {
+import Modal from "../common/Modal";
+import OrderModal from "./OrderModal";
+import { formatDate } from "@/utilities/date";
+
+export interface StatusDetails {
+  name: string;
+  status: boolean;
+  timestamp: Date;
+}
+
+export interface OrderData {
+  uuid: string;
+  reference: string;
+  serviceVolume: string;
+  serviceQuality: string;
+  service: { title: string };
+  status: string;
+  price: number;
+  awaitingConfirmation: StatusDetails;
+  workInProgress: StatusDetails;
+  sentOut: StatusDetails;
+  delivered: StatusDetails;
+  created_at: Date;
+}
+
+interface OrderCardProps extends OrderData {
+  className?: string;
+}
+
+function OrderCard({
+  reference,
+  service,
+  serviceQuality,
+  serviceVolume,
+  price,
+  awaitingConfirmation,
+  workInProgress,
+  sentOut,
+  delivered,
+  created_at,
+  className,
+}: OrderCardProps) {
+  const [open, setOpen] = useState(false);
+
+  const cardDetails = [
+    { title: "Order", value: `#${reference}` },
+    { title: "Title", value: service?.title },
+    { title: "Volume", value: serviceVolume },
+    { title: "Quality", value: serviceQuality },
+    { title: "Price", value: price },
+  ];
+
+  const status: Record<string, StatusDetails> = {
+    orderPlaced: {
+      name: "Order Placed",
+      status: true,
+      timestamp: created_at,
+    },
+    awaitingConfirmation,
+    workInProgress,
+    sentOut,
+    delivered,
+  };
+
+  const process = status["awaitingConfirmation"].status
+    ? Object.keys(status)
+    : Object.keys(status).slice(0, 2);
+
+  const latestStatus =
+    status[process[process.length - 1] as keyof typeof status];
+
+  const isPaid = status["awaitingConfirmation"].status
+    ? latestStatus.name
+    : "Payment not successful";
+
+  console.log(status);
+
   return (
-    <div className="w-80 flex flex-col justify-start">
-      <h6 className="text-lg font-semibold text-dark-900">Service Title</h6>
-      <div className="text-dark-600 w-full flex justify-between items-center">
-        <span>Volume: </span>
-        <span>ServiceQuality</span>
+    <>
+      <div
+        className={twMerge(
+          "w-80 flex flex-col justify-start gap-2 p-4 border-[#E5E5E5] border shadow hover:bg-gray-100 default-transition rounded-3xl cursor-pointer",
+          className
+        )}
+        onClick={() => setOpen(true)}
+      >
+        {cardDetails.map((detail, i) => (
+          <div
+            key={i}
+            className="text-dark-600 w-full flex justify-between items-center"
+          >
+            <span
+              className={twMerge(
+                "text-dark-900",
+                i == 0 ? "font-semibold text-lg" : ""
+              )}
+            >
+              {detail.title}
+            </span>
+            <span className={twMerge(i == 0 ? "text-gray-500" : "")}>
+              {detail.value}
+            </span>
+          </div>
+        ))}
+        <div className="text-dark-600 w-full flex justify-between items-center">
+          <span>Status: </span>
+          <span
+            className={twMerge(
+              "text-white px-2 w-fit rounded-md",
+              latestStatus.name == "Delivered" ? "bg-success" : "bg-gray-500"
+            )}
+          >
+            {isPaid}
+          </span>
+        </div>
       </div>
-      <div className="text-dark-600 w-full flex justify-between items-center">
-        <span>Quality: </span>
-        <span>ServiceQuality</span>
-      </div>
-      <div className="text-dark-600 w-full flex justify-between items-center">
-        <span>Price: </span>
-        <span className="text-secondary">₦ 123</span>
-      </div>
-    </div>
+
+      <Modal visibility={open} setVisibility={() => setOpen(false)}>
+        <OrderModal status={status} process={process} />
+      </Modal>
+    </>
   );
 }
 
