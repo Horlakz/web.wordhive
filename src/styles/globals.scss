@@ -17,6 +17,10 @@
     @apply flex-col flex center;
   }
 
+  .flex-between-center {
+    @apply justify-between flex items-center;
+  }
+
   .default-transition {
     @apply transition duration-500 ease-in-out;
   }
