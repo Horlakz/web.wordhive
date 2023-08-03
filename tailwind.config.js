@@ -19,6 +19,7 @@ module.exports = {
         danger: "#FF4136",
         warning: "#FFC300",
         info: "#7FDBFF",
+        "order-blue": "#0068AA",
         dark: {
           600: "#525252",
           900: "#171717",
