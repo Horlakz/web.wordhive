@@ -31,7 +31,7 @@ function AccountPage() {
 
   return (
     <div className="bg-dashboard bg-cover bg-no-repeat sm:px-36 px-6 sm:py-40 py-6">
-      <main className="bg-white sm:px-20 sm:py-10 py-4 space-y-8 shadow-md">
+      <main className="bg-white sm:px-20 sm:py-10 py-4 space-y-8 drop-shadow-lg shadow-gray-300 rounded-3xl">
         <h3 className="text-secondary sm:text-5xl text-4xl text-center sm:font-extrabold font-bold">
           Account Dashboard
         </h3>
