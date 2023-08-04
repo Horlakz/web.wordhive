@@ -3,7 +3,6 @@ import { twMerge } from "tailwind-merge";
 
 import Modal from "../common/Modal";
 import OrderModal from "./OrderModal";
-import { formatDate } from "@/utilities/date";
 
 export interface StatusDetails {
   name: string;
@@ -69,14 +68,19 @@ function OrderCard({
     ? Object.keys(status)
     : Object.keys(status).slice(0, 2);
 
+  // get all status details that their status is true
+  const processStatusTrue = Object.keys(status).filter(
+    (key) => status[key].status
+  );
+
   const latestStatus =
-    status[process[process.length - 1] as keyof typeof status];
+    status[
+      processStatusTrue[processStatusTrue.length - 1] as keyof typeof status
+    ];
 
   const isPaid = status["awaitingConfirmation"].status
     ? latestStatus.name
     : "Payment not successful";
-
-  console.log(status);
 
   return (
     <>
