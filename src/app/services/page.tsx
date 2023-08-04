@@ -40,7 +40,7 @@ const ServicesPage = async () => {
         {categories.data.map((category: { name: string; uuid: string }) => (
           <span
             key={category.uuid}
-            className="text-lg text-dark-600 hover:text-secondary default-transition cursor-pointer"
+            className="text-lg text-dark-600 hover:text-secondary capitalize default-transition cursor-pointer"
           >
             {category.name}
           </span>
