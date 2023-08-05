@@ -42,7 +42,7 @@ const Header = () => {
         </ul>
       </nav>
 
-      <div className="flex items-center">
+      <div className="items-center hidden sm:flex">
         {isAuth && (
           <Link href="/account" className="text-secondary">
             Account
@@ -52,7 +52,7 @@ const Header = () => {
         <Button
           variant="outline"
           colorScheme="danger"
-          className="border-none hidden sm:block"
+          className="border-none"
           onClick={() => {
             if (isAuth) {
               storage.removeCookie("access");
