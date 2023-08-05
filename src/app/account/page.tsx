@@ -6,10 +6,7 @@ import Link from "next/link";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { A11y, Navigation, Pagination } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
 
-import OrderCard, { OrderData } from "@/components/account/OrderCard";
 import Button from "@/components/common/Button";
 import { UserService } from "@/services/auth/user";
 import { OrderService } from "@/services/order";
@@ -75,30 +72,6 @@ function AccountPage() {
             <Link href="/account/orders" className="text-primary font-medium">
               View All
             </Link>
-          </div>
-
-          {orders.data?.data?.length === 0 && (
-            <div className="w-full flex-center">
-              <p className="text-dark-600 text-center">
-                You have no orders yet
-              </p>
-            </div>
-          )}
-
-          <div className="flex-center w-full justify-between gap-6 select-none cursor-grab">
-            <Swiper
-              modules={[Navigation, Pagination, A11y]}
-              spaceBetween={150}
-              slidesPerView={3}
-              navigation
-              pagination={{ clickable: true }}
-            >
-              {orders.data?.data?.map((order: OrderData) => (
-                <SwiperSlide key={order.uuid}>
-                  <OrderCard {...order} />
-                </SwiperSlide>
-              ))}
-            </Swiper>
           </div>
         </section>
       </main>
