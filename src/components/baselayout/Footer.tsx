@@ -54,17 +54,6 @@ const Footer = () => {
         <span>
           Copyright &copy;{new Date().getFullYear()} {url}
         </span>
-
-        <span className="flex gap-1 sm:p-0 pl-10">
-          <span>Designed by</span>
-          <a href="https://dribbble.com/haropis" className="text-secondary">
-            Haropis Inc
-          </a>
-          <span>and Developed By</span>
-          <a href="https://github.com/horlakz" className="text-secondary">
-            Horlakz
-          </a>
-        </span>
       </section>
     </footer>
   );
