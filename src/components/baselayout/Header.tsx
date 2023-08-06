@@ -141,7 +141,7 @@ const Header = () => {
 
                 if (i === navLinks.length) {
                   return (
-                    <motion.li>
+                    <motion.li key={i}>
                       <Button
                         variant="outline"
                         colorScheme="danger"
