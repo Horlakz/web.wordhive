@@ -1,0 +1,65 @@
+
+.menu-icon,
+.menu-icon:before,
+.menu-icon:after {
+  display: inline-block;
+  background-color: black;
+  height: 0.35rem;
+  width: 1.85rem;
+  transition: transform 0.5s cubic-bezier(0.01, 0.87, 0.36, 0.99);
+  transform-origin: left;
+  border-radius: 2px;
+}
+
+.menu-icon:before,
+.menu-icon:after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.menu-icon {
+  position: relative;
+  transition: background-color 5;
+  animation: fadeIn 1s cubic-bezier(0.01, 0.87, 0.36, 0.99) 0s 1 normal
+    forwards;
+}
+
+.menu-icon:before {
+  top: 175%;
+}
+
+.menu-icon:after {
+  bottom: 175%;
+}
+
+.menu-icon.active {
+  animation: fadeOut 0.5s cubic-bezier(0.01, 0.87, 0.36, 0.99) 0s 1 normal
+    forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    background-color: black;
+  }
+  to {
+    background-color: rgba(255, 74, 74, 0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    background-color: rgba(255, 74, 74, 0);
+  }
+  to {
+    background-color: black;
+  }
+}
+
+.menu-icon.active:before {
+  transform: rotate(-45deg);
+}
+
+.menu-icon.active:after {
+  transform: rotate(45deg);
+}
