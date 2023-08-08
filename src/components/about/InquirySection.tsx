@@ -17,7 +17,7 @@ function InquirySection() {
           perspiciatis est fugiat, sed quaerat omnis eligendi quibusdam,
           repellat atque ex.
         </p>
-        <Button>Contact us now!</Button>
+        <Button href="/contact">Contact us now!</Button>
       </div>
 
       <Image

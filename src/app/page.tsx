@@ -22,7 +22,7 @@ export default function Home() {
             quo soluta dolorum similique veniam, placeat animi pariatur
             distinctio facilis fugiat modi!
           </p>
-          <Button>Get Started</Button>
+          <Button href="/services">Get Started</Button>
         </div>
 
         <Image
