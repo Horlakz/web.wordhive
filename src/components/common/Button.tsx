@@ -22,6 +22,7 @@ interface ButtonProps {
   onClick?: () => void;
   disabled?: boolean;
   isLoading?: boolean;
+  href?: string;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -34,6 +35,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled = false,
   isLoading,
   icon,
+  href,
 }) => {
   const isIcon = isLoading ? <Spinner /> : icon;
 
@@ -46,15 +48,30 @@ const Button: React.FC<ButtonProps> = ({
     }
   };
 
+  const elementClassName = twMerge(
+    "rounded-md px-6 py-2.5 w-fit flex items-center disabled:cursor-not-allowed disabled:bg-gray-400",
+    getVariantClasses(),
+    className
+  );
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        className={elementClassName}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {children}
+      </a>
+    );
+  }
+
   return (
     <button
       type="button"
       disabled={disabled || isLoading}
-      className={twMerge(
-        "rounded-md px-6 py-2.5 flex items-center disabled:cursor-not-allowed disabled:bg-gray-400",
-        getVariantClasses(),
-        className
-      )}
+      className={elementClassName}
       onClick={onClick}
     >
       {isIcon && iconPosition === "left" && (
