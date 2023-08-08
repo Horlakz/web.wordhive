@@ -131,7 +131,7 @@ const Header = () => {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="absolute top-14 right-0 flex flex-col items-end bg-white gap-4 px-4 w-40"
+              className="z-10 absolute top-14 right-0 flex flex-col items-end bg-white text-lg gap-4 px-4 w-40"
             >
               {[
                 ...navLinks,
