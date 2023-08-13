@@ -42,11 +42,11 @@ const VerifyPassword: FC<Props> = ({ goTo }) => {
     {
       onSuccess: (res) => {
         toast.success("Login Successful");
-        router.push("/account");
         setEmail("");
         setPassword("");
         setModal(false);
         authService.setCookie("access", res.data.access_token);
+        res.data.is_admin ? router.push("/admin") : router.push("/account");
       },
       onError: (err: any) => {
         if (err.response.data.message == "Email is not verified") {
