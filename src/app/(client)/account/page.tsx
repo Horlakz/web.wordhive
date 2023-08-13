@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import Button from "@/components/common/Button";
 import { UserService } from "@/services/auth/user";
@@ -12,8 +13,11 @@ import LoadingPage from "../loading";
 function AccountPage() {
   const userService = new UserService();
   const orderService = new OrderService();
+  const router = useRouter();
 
-  const user = useQuery(["user"], async () => await userService.getProfile());
+  const user = useQuery(["user"], async () => await userService.getProfile(), {
+    onSuccess: (res) => res.data.is_admin && router.push("/admin"),
+  });
   const orders = useQuery(
     ["orders"],
     async () => await orderService.listOrder()
