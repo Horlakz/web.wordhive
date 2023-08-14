@@ -1,3 +1,6 @@
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 
 import InputSearch from "@/components/admin/InputSearch";
@@ -8,10 +11,21 @@ import ChevronRightIcon from "@/components/icons/ChevronRight";
 import { UserData, UserService } from "@/services/auth/user";
 import { formatDate } from "@/utilities/date";
 
-const AdminUsersPage = async () => {
+const AdminUsersPage = () => {
   const userService = new UserService();
 
-  const { data } = await userService.getAllUsers();
+  const { data, isError, isLoading } = useQuery(
+    ["users"],
+    async () => await userService.getAllUsers()
+  );
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError)
+    return (
+      <p className="text-red-600 text-lg">
+        Any Error Occured while loading your data
+      </p>
+    );
 
   return (
     <div>
@@ -40,7 +54,7 @@ const AdminUsersPage = async () => {
             { title: "View Orders" },
           ]}
           tableKeys={["fullname", "email", "isEmailVerified", "created_at"]}
-          tableData={data.map((user: UserData) => {
+          tableData={data.data.map((user: UserData) => {
             return {
               ...user,
               created_at: formatDate(user.created_at),

@@ -4,6 +4,8 @@ export interface OrderData {
   serviceId: string;
   serviceQuality: string;
   serviceVolume: string;
+  user?: { fullname: string; email: string };
+  service?: { title: string };
 }
 
 export class OrderService extends Client {
@@ -21,5 +23,9 @@ export class OrderService extends Client {
 
   verifyOrder(payment_reference: string) {
     return this.get(`verify/${payment_reference}`);
+  }
+
+  getUserOrders(id: string) {
+    return this.get("user/" + id);
   }
 }

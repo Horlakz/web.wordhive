@@ -20,4 +20,8 @@ export class UserService extends Client {
   getAllUsers() {
     return this.get("all");
   }
+
+  getUser(uuid: string) {
+    return this.get(uuid);
+  }
 }
