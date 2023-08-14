@@ -31,14 +31,12 @@ function AdminHeader() {
             const isActive = pathname.startsWith(link.path);
 
             return (
-              <li key={i} className="flex gap-2">
+              <li
+                key={i}
+                className={classNames("flex gap-2", isActive && "text-white")}
+              >
                 <Image src={link.icon} alt={link.name} />
-                <Link
-                  className={classNames(isActive && "text-primary")}
-                  href={link.path}
-                >
-                  {link.name}
-                </Link>
+                <Link href={link.path}>{link.name}</Link>
               </li>
             );
           })}
