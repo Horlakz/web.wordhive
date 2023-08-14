@@ -25,6 +25,24 @@ interface ButtonProps {
   href?: string;
 }
 
+const colorSchemeSolidClasses: Record<ColorScheme, string> = {
+  primary: "bg-primary",
+  secondary: "bg-secondary",
+  success: "bg-success",
+  danger: "bg-danger",
+  warning: "bg-warning",
+  info: "bg-info",
+};
+
+const colorSchemeOutlineClasses: Record<ColorScheme, string> = {
+  primary: "text-primary border-primary",
+  secondary: "text-secondary border-secondary",
+  success: "text-success border-success",
+  danger: "text-danger border-danger",
+  warning: "text-warning border-warning",
+  info: "text-info border-info",
+};
+
 const Button: React.FC<ButtonProps> = ({
   children,
   iconPosition = "left",
@@ -42,14 +60,14 @@ const Button: React.FC<ButtonProps> = ({
   const getVariantClasses = () => {
     switch (variant) {
       case "outline":
-        return `border-2 border-${colorScheme} text-${colorScheme} bg-transparent default-transition`;
+        return `border-2 ${colorSchemeOutlineClasses[colorScheme]} bg-transparent default-transition`;
       default:
-        return `bg-${colorScheme} text-white hover:bg-opacity-80 default-transition`;
+        return `${colorSchemeSolidClasses[colorScheme]} text-white hover:bg-opacity-80 default-transition`;
     }
   };
 
   const elementClassName = twMerge(
-    "rounded-md px-6 py-2.5 flex items-center disabled:cursor-not-allowed disabled:bg-gray-400",
+    "rounded-md px-6 py-1.5 flex items-center disabled:cursor-not-allowed disabled:bg-gray-400",
     href && "w-fit",
     getVariantClasses(),
     className
