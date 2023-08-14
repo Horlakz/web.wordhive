@@ -49,7 +49,7 @@ function Table({
               {/* table actions */}
               <th
                 scope="row"
-                className="flex-center px-6 py-4 font-medium text-gray-800 space-x-2 whitespace-nowrap"
+                className="flex items-center px-6 py-4 font-medium space-x-2 whitespace-nowrap"
               >
                 {tableActions &&
                   tableActions.map((action, index) => (
