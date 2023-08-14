@@ -19,7 +19,7 @@ function AdminHeader() {
   }
 
   return (
-    <header className="bg-admin-primary flex justify-between items-center text-[#D4D4D4] text-lg capitalize sm:px-12 px-6 py-4 shadow-lg">
+    <header className="bg-admin-nav flex justify-between items-center text-[#D4D4D4] text-lg capitalize sm:px-12 px-6 py-4 shadow-lg">
       <Link href="/admin" className="flex-center gap-2">
         <Image src="/images/logo.png" width={40} height={40} alt="logo" />
         <h1 className="text-3xl font-bold">Wordhive</h1>

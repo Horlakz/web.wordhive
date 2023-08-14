@@ -21,7 +21,7 @@ module.exports = {
         info: "#7FDBFF",
         "order-blue": "#0068AA",
         dark: { 600: "#525252", 900: "#171717" },
-        admin: { primary: "#003455", light: "#009CFF" },
+        admin: { nav: "#003455", primary: "#0068AA", light: "#009CFF" },
       },
     },
   },
