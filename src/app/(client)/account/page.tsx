@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 
 import Button from "@/components/common/Button";
 import { UserService } from "@/services/auth/user";
+import OrderCard, { OrderData } from "@/components/account/OrderCard";
 import { OrderService } from "@/services/order";
 import LoadingPage from "../loading";
 
@@ -28,7 +29,7 @@ function AccountPage() {
     return <p>An Error Occured while loading UI</p>;
 
   return (
-    <div className="bg-dashboard bg-cover bg-no-repeat sm:px-36 px-6 sm:py-40 py-6">
+    <div className="bg-dashboard bg-cover bg-no-repeat sm:px-28 px-6 sm:py-32 py-6">
       <main className="bg-white sm:px-20 sm:py-10 py-4 space-y-8 drop-shadow-lg shadow-gray-300 rounded-3xl">
         <h3 className="text-secondary sm:text-5xl text-4xl text-center sm:font-extrabold font-bold">
           Account Dashboard
@@ -36,11 +37,7 @@ function AccountPage() {
 
         <div className="relative bg-primary h-32 rounded-t-3xl">
           <Image
-            src={
-              "https://ui-avatars.com/api/" +
-              user?.data?.data?.fullname +
-              "?background=random"
-            }
+            src={`https://ui-avatars.com/api/?name=${user.data.data.fullname}&background=random`}
             width={100}
             height={100}
             alt="profile icon"
@@ -48,31 +45,33 @@ function AccountPage() {
           />
         </div>
 
-        <section className="flex justify-between items-end pt-2 px-4">
-          <div className="grid">
-            <span className="text-2xl font-semibold text-dark-900">
-              {user.data?.data?.fullname}
-            </span>
-            <span className="sm:text-xl text-dark-600">
-              {user.data?.data?.email}
-            </span>
-            <span className="sm:text-xl text-dark-600">+234 814 3740 522</span>
-          </div>
-          <Button
-            variant="outline"
-            className="border-none text-lg hidden sm:block"
-            // onClick={() => console.log("edit profile")}
-          >
-            Edit profile
-          </Button>
+        <section className="flex justify-between pt-2 px-4">
+          <span className="text-2xl font-semibold text-dark-900">
+            {user.data.data.fullname}
+          </span>
+          <span className="sm:text-xl text-dark-600">
+            {user.data.data.email}
+          </span>
         </section>
 
         <section className="space-y-4">
-          <div className="px-4 w-full flex-between-center">
-            <h6 className="text-xl font-semibold">List of orders</h6>
-            <Link href="/account/orders" className="text-primary font-medium">
-              View All
-            </Link>
+          <h1 className="text-2xl font-semibold mb-4">My Orders</h1>
+
+          <div className="w-full flex-center">
+            <section className="grid sm:grid-cols-3 sm:gap-10 gap-6 w-fit">
+              {orders.data.data.map((order: OrderData) => (
+                <OrderCard key={order.uuid} {...order} />
+              ))}
+
+              {orders.data.data.length === 0 && (
+                <div className="flex flex-col items-center justify-center">
+                  <p className="text-dark-600 text-xl font-semibold mb-4">
+                    You have no orders yet
+                  </p>
+                  <Button>Shop Now</Button>
+                </div>
+              )}
+            </section>
           </div>
         </section>
       </main>
