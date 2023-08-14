@@ -28,7 +28,8 @@ function AdminHeader() {
       <nav className="hidden sm:block">
         <ul className="flex-center gap-8">
           {adminNavLinks.map((link, i) => {
-            const isActive = pathname.startsWith(link.path);
+            const path = "/admin" + link.path;
+            const isActive = pathname.startsWith(path);
 
             return (
               <li
@@ -36,7 +37,7 @@ function AdminHeader() {
                 className={classNames("flex gap-2", isActive && "text-white")}
               >
                 <Image src={link.icon} alt={link.name} />
-                <Link href={link.path}>{link.name}</Link>
+                <Link href={path}>{link.name}</Link>
               </li>
             );
           })}
