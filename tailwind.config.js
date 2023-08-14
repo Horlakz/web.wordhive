@@ -20,10 +20,8 @@ module.exports = {
         warning: "#FFC300",
         info: "#7FDBFF",
         "order-blue": "#0068AA",
-        dark: {
-          600: "#525252",
-          900: "#171717",
-        },
+        dark: { 600: "#525252", 900: "#171717" },
+        admin: { primary: "#003455", light: "#009CFF" },
       },
     },
   },
