@@ -1,12 +1,42 @@
+"use client";
+import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+
 import InputSearch from "@/components/admin/InputSearch";
 import Button from "@/components/common/Button";
 import Table from "@/components/common/Table";
 import ChevronLeftIcon from "@/components/icons/ChevronLeft";
 import ChevronRightIcon from "@/components/icons/ChevronRight";
 import PlusIcon from "@/components/icons/Plus";
-import Link from "next/link";
+import { PortfolioService } from "@/services/portfolio";
+import { PortfolioFieldService } from "@/services/portfolio/field";
 
 const AdminPortfolioPage = () => {
+  const router = useRouter();
+  const portfolioService = new PortfolioService();
+  const portfolioServiceField = new PortfolioFieldService();
+
+  const portfolios = useQuery(
+    ["portfolios"],
+    async () => await portfolioService.listPortfolios()
+  );
+  const fields = useQuery(
+    ["fields"],
+    async () => await portfolioServiceField.listPorfolioField()
+  );
+
+  const isLoading = portfolios.isLoading || fields.isLoading;
+  const isError = portfolios.isError || fields.isError;
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError)
+    return (
+      <p className="text-red-600 text-lg">
+        Any Error Occured while loading your data
+      </p>
+    );
+
   return (
     <div>
       <section className="w-full flex-center py-6">
@@ -20,15 +50,27 @@ const AdminPortfolioPage = () => {
           </Button>
 
           <div className="flex items-center gap-4">
-            <label htmlFor="category">Sort by category: </label>
+            <label htmlFor="field">Sort by Field: </label>
             <select
-              name="category"
-              id="category"
+              name="field"
+              id="field"
               className="bg-white drop-shadow-md p-3"
+              onChange={(e) => {
+                if (e.target.value === "manage-categories") {
+                  router.push("/admin/services/categories");
+                } else {
+                  return;
+                }
+              }}
             >
-              <option value="all">All</option>
-              <option value="hair">Hair</option>
-              <option value="nails">Nails</option>
+              {fields.data.data.map((field: { uuid: string; name: string }) => (
+                <option key={field.uuid} value={field.uuid}>
+                  {field.name}
+                </option>
+              ))}
+              <option value="manage-categories" className="text-sm">
+                Manage Categories
+              </option>
             </select>
           </div>
 
@@ -49,20 +91,10 @@ const AdminPortfolioPage = () => {
             { title: "Actions" },
           ]}
           tableKeys={["name", "category"]}
-          tableData={[
-            {
-              id: "1",
-              name: "John Doe",
-              category: "Textbook",
-              date: "May 31, 2021",
-            },
-            {
-              id: "2",
-              name: "John Doe",
-              category: "Textbook",
-              date: "May 31, 2021",
-            },
-          ]}
+          tableData={portfolios.data.data.results.map((portfolio: any) => ({
+            ...portfolio,
+            category: portfolio.category.name,
+          }))}
           tableActions={[
             (data) => (
               <Link href={"/services/" + data.id}>
