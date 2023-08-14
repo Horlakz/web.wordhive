@@ -1,3 +1,5 @@
+"use client";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 
 import InputSearch from "@/components/admin/InputSearch";
@@ -5,13 +7,28 @@ import Button from "@/components/common/Button";
 import Table from "@/components/common/Table";
 import ChevronLeftIcon from "@/components/icons/ChevronLeft";
 import ChevronRightIcon from "@/components/icons/ChevronRight";
-import PlusIcon from "@/components/icons/Plus";
+import { OrderData, OrderService } from "@/services/order";
 
 const AdminOrderPage = () => {
+  const orderService = new OrderService();
+
+  const { data, isError, isLoading } = useQuery(
+    ["orders"],
+    async () => await orderService.listAllOrders()
+  );
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError)
+    return (
+      <p className="text-red-600 text-lg">
+        Any Error Occured while loading your data
+      </p>
+    );
+
   return (
     <div>
       <section className="w-full flex-center py-6">
-        <InputSearch />
+        <InputSearch placeholder="Search order with reference" />
       </section>
 
       <section>
@@ -34,44 +51,17 @@ const AdminOrderPage = () => {
             { title: "Order Status" },
             { title: "View Details" },
           ]}
-          tableKeys={["reference", "title", "fullname", "status"]}
-          tableData={[
-            {
-              id: "1",
-              reference: "#SVC_X9MT0FLYJ6P4",
-              title: "Opinion Paper",
-              fullname: "John Doe",
-              status: "Payment not successful",
-              date: "May 31, 2021",
-            },
-            {
-              id: "2",
-              reference: "#SVC_X9MT0FLYJ6P4",
-              title: "Opinion Paper",
-              fullname: "John Doe",
-              status: "Delivered",
-              date: "May 31, 2021",
-            },
-            {
-              id: "3",
-              reference: "#SVC_X9MT0FLYJ6P4",
-              title: "Opinion Paper",
-              fullname: "John Doe",
-              status: "Pending",
-              date: "May 31, 2021",
-            },
-            {
-              id: "4",
-              reference: "#SVC_X9MT0FLYJ6P4",
-              title: "Opinion Paper",
-              fullname: "John Doe",
-              status: "Payment not successful",
-              date: "May 31, 2021",
-            },
-          ]}
+          tableKeys={["reference", "service_title", "user_fullname", "status"]}
+          tableData={data.data.map((order: Required<OrderData>) => {
+            return {
+              ...order,
+              user_fullname: order.user.fullname,
+              service_title: order.service.title,
+            };
+          })}
           tableActions={[
             (data) => (
-              <Link href={"/admin/orders/" + data.id}>
+              <Link href={"/admin/orders/" + data.uuid}>
                 <Button variant="outline">View Details</Button>,
               </Link>
             ),

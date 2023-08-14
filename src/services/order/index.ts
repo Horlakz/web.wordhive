@@ -17,6 +17,10 @@ export class OrderService extends Client {
     return this.get("");
   }
 
+  listAllOrders() {
+    return this.get("all");
+  }
+
   createOrder(data: OrderData) {
     return this.post<OrderData>("", data);
   }
