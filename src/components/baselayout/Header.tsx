@@ -1,16 +1,15 @@
+import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useContext, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 
-import menu from "@/assets/icons/menu.svg";
 import Button from "@/components/common/Button";
 import { AuthContext } from "@/store/context/auth";
 import navLinks from "@/store/data/nav-links.json";
-import AuthModal from "../auth";
 import Storage from "@/utilities/storage";
 import classNames from "classnames";
+import AuthModal from "../auth";
 
 const AuthActionBtn = ({ isAuth }: { isAuth: boolean }) => {
   const router = useRouter();
