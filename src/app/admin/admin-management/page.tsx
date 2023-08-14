@@ -1,12 +1,31 @@
+"use client";
+import { useQuery } from "@tanstack/react-query";
+
 import InputSearch from "@/components/admin/InputSearch";
 import Button from "@/components/common/Button";
 import Table from "@/components/common/Table";
 import ChevronLeftIcon from "@/components/icons/ChevronLeft";
 import ChevronRightIcon from "@/components/icons/ChevronRight";
 import PlusIcon from "@/components/icons/Plus";
-import Link from "next/link";
+import { UserData, UserService } from "@/services/auth/user";
+import { formatDate } from "@/utilities/date";
 
 const AdminServicePage = () => {
+  const userService = new UserService();
+
+  const { data, isError, isLoading } = useQuery(
+    ["admins"],
+    async () => await userService.getAllAdmins()
+  );
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError)
+    return (
+      <p className="text-red-600 text-lg">
+        Any Error Occured while loading your data
+      </p>
+    );
+
   return (
     <div>
       <section className="w-full flex-center py-6">
@@ -36,21 +55,13 @@ const AdminServicePage = () => {
             { title: "Date Added" },
             { title: "Remove Admin" },
           ]}
-          tableKeys={["name", "email", "date"]}
-          tableData={[
-            {
-              id: "1",
-              name: "John Doe",
-              email: "horlakz@hndwok.com",
-              date: "May 31, 2021",
-            },
-            {
-              id: "2",
-              name: "John Doe",
-              email: "horlakz@hndwok.com",
-              date: "May 31, 2021",
-            },
-          ]}
+          tableKeys={["fullname", "email", "created_at"]}
+          tableData={data.data.map((user: UserData) => {
+            return {
+              ...user,
+              created_at: formatDate(user.created_at),
+            };
+          })}
           tableActions={[
             (data) => (
               <Button variant="outline" colorScheme="danger">

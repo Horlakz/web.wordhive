@@ -21,6 +21,10 @@ export class UserService extends Client {
     return this.get("all");
   }
 
+  getAllAdmins() {
+    return this.get("admin");
+  }
+
   getUser(uuid: string) {
     return this.get(uuid);
   }
