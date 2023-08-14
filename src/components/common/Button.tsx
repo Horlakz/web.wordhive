@@ -49,7 +49,7 @@ const Button: React.FC<ButtonProps> = ({
   };
 
   const elementClassName = twMerge(
-    "rounded-md px-6 py-2.5 w-fit flex items-center disabled:cursor-not-allowed disabled:bg-gray-400",
+    "rounded-md px-6 py-2.5 flex items-center disabled:cursor-not-allowed disabled:bg-gray-400",
     getVariantClasses(),
     className
   );
