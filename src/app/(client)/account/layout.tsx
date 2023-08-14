@@ -1,8 +1,8 @@
 import React from "react";
-import AccountLayoutWrapper from "@/components/account/Wrapper";
+import ProtectedRoute from "@/components/common/ProtectedRoute";
 
 const AccountLayout = ({ children }: { children: React.ReactNode }) => {
-  return <AccountLayoutWrapper>{children}</AccountLayoutWrapper>;
+  return <ProtectedRoute>{children}</ProtectedRoute>;
 };
 
 export default AccountLayout;

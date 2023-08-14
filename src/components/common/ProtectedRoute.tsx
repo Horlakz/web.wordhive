@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 
 import Storage from "@/utilities/storage";
 
-const AccountLayoutWrapper = ({ children }: { children: ReactNode }) => {
+const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const storage = new Storage();
   const router = useRouter();
 
@@ -22,4 +22,4 @@ const AccountLayoutWrapper = ({ children }: { children: ReactNode }) => {
   return <>{children}</>;
 };
 
-export default AccountLayoutWrapper;
+export default ProtectedRoute;
