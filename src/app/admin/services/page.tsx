@@ -65,7 +65,7 @@ const AdminServicePage = () => {
           ]}
           tableActions={[
             (data) => (
-              <Link href={"/services/" + data.id}>
+              <Link href={"/services"}>
                 <Button variant="outline">View</Button>
               </Link>
             ),
