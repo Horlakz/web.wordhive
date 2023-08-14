@@ -8,7 +8,7 @@ function AdminLayoutWrapper({ children }: { children: React.ReactNode }) {
   return (
     <ProtectedRoute>
       <AdminHeader />
-      {children}
+      <main className="px-14 py-6">{children}</main>
     </ProtectedRoute>
   );
 }
