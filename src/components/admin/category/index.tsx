@@ -42,7 +42,7 @@ const CategoryManagement: FC<Props> = ({
     setDeleteModal(false);
     setValue("");
     setCategoryId("");
-    queryClient.invalidateQueries(["categories"]);
+    queryClient.invalidateQueries([field]);
   }
 
   function onError(err: any) {
@@ -51,7 +51,7 @@ const CategoryManagement: FC<Props> = ({
     );
   }
 
-  const categories = useQuery(["categories"], async () => await list());
+  const categories = useQuery([field], async () => await list());
 
   const createCategory = useMutation(async () => await create({ name }), {
     onSuccess: () => onSuccess(),
@@ -60,12 +60,12 @@ const CategoryManagement: FC<Props> = ({
 
   const updateCategory = useMutation(
     async () => await update(categoryId, { name }),
-    { onSuccess: () => onSuccess("Category Updated Successfully"), onError }
+    { onSuccess: () => onSuccess(field + " Updated Successfully"), onError }
   );
 
   const deleteCategory = useMutation(
     async () => await remove(categoryId, { name }),
-    { onSuccess: () => onSuccess("Category Deleted Successfully"), onError }
+    { onSuccess: () => onSuccess(field + " Deleted Successfully"), onError }
   );
 
   const isLoading = categories.isLoading;
