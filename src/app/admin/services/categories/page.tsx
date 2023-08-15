@@ -3,7 +3,7 @@
 import CategoryManagement from "@/components/admin/category";
 import { ApplicationServiceCategory } from "@/services/services/category";
 
-const AdminServicePage = () => {
+const AdminServiceCategoryPage = () => {
   const appServiceCategory = new ApplicationServiceCategory();
 
   return (
@@ -17,4 +17,4 @@ const AdminServicePage = () => {
   );
 };
 
-export default AdminServicePage;
+export default AdminServiceCategoryPage;
