@@ -21,14 +21,14 @@ interface CategoryModalProps {
 function CategoryModal({
   visible,
   onClose,
-  btnName = "Create Category",
-  placeholder = "Enter name of Category",
+  field = "category",
+  btnName = "Create " + field,
+  placeholder = "Enter name of " + field,
   value,
   setValue,
   isLoading = false,
   onSubmit,
   isDelete = false,
-  field = "category",
   title,
 }: CategoryModalProps) {
   return (
