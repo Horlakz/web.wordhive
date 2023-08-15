@@ -57,7 +57,7 @@ const AdminPortfolioPage = () => {
               className="bg-white drop-shadow-md p-3"
               onChange={(e) => {
                 if (e.target.value === "manage-categories") {
-                  router.push("/admin/services/categories");
+                  router.push("/admin/portfolio/fields");
                 } else {
                   return;
                 }
@@ -69,7 +69,7 @@ const AdminPortfolioPage = () => {
                 </option>
               ))}
               <option value="manage-categories" className="text-sm">
-                Manage Categories
+                Manage Fields
               </option>
             </select>
           </div>
