@@ -1,5 +1,9 @@
 import { Client } from "../apiClient";
 
+export interface ServiceCategoryData {
+  name: string;
+}
+
 export class ApplicationServiceCategory extends Client {
   constructor() {
     super("/service-category");
@@ -9,15 +13,15 @@ export class ApplicationServiceCategory extends Client {
     return await this.get("");
   }
 
-  //   async createPortfolio(data: PortfolioData) {
-  //     return await this.post("", data);
-  //   }
+  async createServiceCategory(data: ServiceCategoryData) {
+    return await this.post("", data);
+  }
 
-  //   async updatePortfolio(id: string, data: PortfolioData) {
-  //     return await this.put(id, data);
-  //   }
+  async updateServiceCategory(id: string, data: ServiceCategoryData) {
+    return await this.patch(id, data);
+  }
 
-  //   async deletePortfolio(id: string) {
-  //     return await this.delete(id);
-  //   }
+  async deleteServiceCategory(id: string) {
+    return await this.delete(id);
+  }
 }
