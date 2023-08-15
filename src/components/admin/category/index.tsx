@@ -35,7 +35,7 @@ const CategoryManagement: FC<Props> = ({
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  function onSuccess(msg: string = "Category Created Successfully") {
+  function onSuccess(msg: string = field + " Created Successfully") {
     toast.success(msg);
     setCreateModal(false);
     setUpdateModal(false);
