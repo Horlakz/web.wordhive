@@ -44,7 +44,7 @@ function Table({
               {tableKeys.map((key, index) => (
                 <td
                   scope="row"
-                  className={`w-full px-6 py-4 font-medium text-dark-900 line-clamp-1 whitespace-nowrap`}
+                  className={`w-full px-6 py-2 font-medium text-dark-900 line-clamp-1 whitespace-nowrap`}
                   key={index}
                 >
                   {data[key]}
@@ -54,7 +54,7 @@ function Table({
               {/* table actions */}
               <td
                 scope="row"
-                className="w-full flex items-center px-6 py-4 font-medium space-x-2 whitespace-nowrap"
+                className="w-full flex items-center px-6 py-2 font-medium space-x-2 whitespace-nowrap"
               >
                 {tableActions &&
                   tableActions.map((action, index) => (
