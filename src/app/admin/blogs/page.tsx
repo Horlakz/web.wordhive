@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 
+import DeleteModal from "@/components/admin/DeleteModal";
 import InputSearch from "@/components/admin/InputSearch";
 import Button from "@/components/common/Button";
-import Modal from "@/components/common/Modal";
 import Table from "@/components/common/Table";
 import ChevronLeftIcon from "@/components/icons/ChevronLeft";
 import ChevronRightIcon from "@/components/icons/ChevronRight";
@@ -138,29 +138,12 @@ const AdminBlogPage = () => {
         />
       </section>
 
-      <Modal
-        visibility={deleteModal}
-        setVisibility={() => setDeleteModal(false)}
-      >
-        <div className="p-12 space-y-4">
-          <p className="my-2 text-danger text-center w-80">
-            Are you sure you want to delete blog?
-          </p>
-
-          <div className="flex center gap-2">
-            <Button variant="outline" onClick={() => setDeleteModal(false)}>
-              Cancel
-            </Button>
-            <Button
-              colorScheme="danger"
-              isLoading={removeBlog.isLoading}
-              onClick={() => removeBlog.mutate()}
-            >
-              Delete
-            </Button>
-          </div>
-        </div>
-      </Modal>
+      <DeleteModal
+        deleteModal={deleteModal}
+        setDeleteModal={setDeleteModal}
+        remove={removeBlog}
+        title="blog"
+      />
     </div>
   );
 };

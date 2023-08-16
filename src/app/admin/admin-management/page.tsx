@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 
+import DeleteModal from "@/components/admin/DeleteModal";
 import InputSearch from "@/components/admin/InputSearch";
 import Button from "@/components/common/Button";
 import InputGroup from "@/components/common/InputGroup";
@@ -37,10 +38,6 @@ const AdminServicePage = () => {
   function handleCreateAdmin() {
     setPassword(randomString());
     createAdmin.mutate();
-  }
-
-  function handleRemoveAdmin() {
-    removeAdmin.mutate();
   }
 
   const createAdmin = useMutation(
@@ -248,32 +245,12 @@ const AdminServicePage = () => {
         </div>
       </Modal>
 
-      <Modal
-        visibility={removeAdminModal}
-        setVisibility={() => setRemoveAdminModal(false)}
-      >
-        <div className="p-12 space-y-4">
-          <p className="my-2 text-danger text-center w-80">
-            Are you sure you want to remove admin?
-          </p>
-
-          <div className="flex center gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setRemoveAdminModal(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              colorScheme="danger"
-              isLoading={removeAdmin.isLoading}
-              onClick={handleRemoveAdmin}
-            >
-              Remove Admin
-            </Button>
-          </div>
-        </div>
-      </Modal>
+      <DeleteModal
+        deleteModal={removeAdminModal}
+        setDeleteModal={setRemoveAdminModal}
+        remove={removeAdmin}
+        title="Admin"
+      />
     </div>
   );
 };
