@@ -1,6 +1,7 @@
 import { Client } from "../apiClient";
 
 export interface BlogCategoryData {
+  uuid?: string;
   name: string;
 }
 
