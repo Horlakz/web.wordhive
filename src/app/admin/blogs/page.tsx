@@ -1,10 +1,13 @@
 "use client";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "react-hot-toast";
 
 import InputSearch from "@/components/admin/InputSearch";
 import Button from "@/components/common/Button";
+import Modal from "@/components/common/Modal";
 import Table from "@/components/common/Table";
 import ChevronLeftIcon from "@/components/icons/ChevronLeft";
 import ChevronRightIcon from "@/components/icons/ChevronRight";
@@ -14,6 +17,8 @@ import { BlogCategoryService } from "@/services/blog/category";
 
 const AdminBlogPage = () => {
   const router = useRouter();
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [id, setId] = useState("");
   const blogService = new BlogService();
   const blogServiceCategory = new BlogCategoryService();
 
@@ -22,6 +27,19 @@ const AdminBlogPage = () => {
     ["categories"],
     async () => await blogServiceCategory.listBlogCategory()
   );
+
+  const removeBlog = useMutation(async () => await blogService.deleteBlog(id), {
+    onSuccess: () => {
+      blogs.refetch();
+      setDeleteModal(false);
+      toast.success("Blog deleted successfully");
+    },
+    onError: (error: any) => {
+      toast.error(
+        error.response.data.message ?? "An error occured while deleting Blog"
+      );
+    },
+  });
 
   const isLoading = blogs.isLoading || categories.isLoading;
   const isError = blogs.isError || categories.isError;
@@ -96,7 +114,7 @@ const AdminBlogPage = () => {
           tableKeys={["title", "category"]}
           tableData={blogs.data.data.map((blog: Required<BlogData>) => ({
             ...blog,
-            category: blog.category.name,
+            category: (blog.category as { name: string }).name,
           }))}
           tableActions={[
             (data) => (
@@ -105,13 +123,44 @@ const AdminBlogPage = () => {
               </Link>
             ),
             (data) => (
-              <Button variant="outline" colorScheme="danger">
+              <Button
+                variant="outline"
+                colorScheme="danger"
+                onClick={() => {
+                  setId(data.uuid);
+                  setDeleteModal(true);
+                }}
+              >
                 Delete
               </Button>
             ),
           ]}
         />
       </section>
+
+      <Modal
+        visibility={deleteModal}
+        setVisibility={() => setDeleteModal(false)}
+      >
+        <div className="p-12 space-y-4">
+          <p className="my-2 text-danger text-center w-80">
+            Are you sure you want to delete blog?
+          </p>
+
+          <div className="flex center gap-2">
+            <Button variant="outline" onClick={() => setDeleteModal(false)}>
+              Cancel
+            </Button>
+            <Button
+              colorScheme="danger"
+              isLoading={removeBlog.isLoading}
+              onClick={() => removeBlog.mutate()}
+            >
+              Delete
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
