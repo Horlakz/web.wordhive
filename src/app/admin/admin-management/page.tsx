@@ -266,7 +266,7 @@ const AdminServicePage = () => {
             </Button>
             <Button
               colorScheme="danger"
-              isLoading={createAdmin.isLoading}
+              isLoading={removeAdmin.isLoading}
               onClick={handleRemoveAdmin}
             >
               Remove Admin
