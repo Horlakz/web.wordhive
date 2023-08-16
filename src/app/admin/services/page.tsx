@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "react-hot-toast";
 
 import InputSearch from "@/components/admin/InputSearch";
 import Button from "@/components/common/Button";
@@ -11,6 +13,7 @@ import ChevronRightIcon from "@/components/icons/ChevronRight";
 import PlusIcon from "@/components/icons/Plus";
 import { ApplicationService } from "@/services/services";
 import { ApplicationServiceCategory } from "@/services/services/category";
+import DeleteModal from "@/components/admin/DeleteModal";
 
 interface ServiceData {
   uuid: string;
@@ -21,6 +24,8 @@ interface ServiceData {
 
 const AdminServicePage = () => {
   const router = useRouter();
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [id, setId] = useState("");
   const appService = new ApplicationService();
   const appServiceCategory = new ApplicationServiceCategory();
 
@@ -32,6 +37,19 @@ const AdminServicePage = () => {
     ["categories"],
     async () => await appServiceCategory.listServiceCategories()
   );
+
+  const remove = useMutation(async () => await appService.deleteService(id), {
+    onSuccess: () => {
+      services.refetch();
+      setDeleteModal(false);
+      toast.success("Service deleted successfully");
+    },
+    onError: (error: any) => {
+      toast.error(
+        error.response.data.message ?? "An error occured while deleting service"
+      );
+    },
+  });
 
   const isLoading = services.isLoading || categories.isLoading;
   const isError = services.isError || categories.isError;
@@ -111,13 +129,27 @@ const AdminServicePage = () => {
           }))}
           tableActions={[
             (data) => (
-              <Button variant="outline" colorScheme="danger">
+              <Button
+                variant="outline"
+                colorScheme="danger"
+                onClick={() => {
+                  setId(data.uuid);
+                  setDeleteModal(true);
+                }}
+              >
                 Delete
               </Button>
             ),
           ]}
         />
       </section>
+
+      <DeleteModal
+        title="Service"
+        deleteModal={deleteModal}
+        setDeleteModal={setDeleteModal}
+        remove={remove}
+      />
     </div>
   );
 };
