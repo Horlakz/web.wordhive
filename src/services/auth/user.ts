@@ -28,4 +28,8 @@ export class UserService extends Client {
   getUser(uuid: string) {
     return this.get(uuid);
   }
+
+  deleteUser(uuid: string) {
+    return this.delete(uuid);
+  }
 }
