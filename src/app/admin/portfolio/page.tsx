@@ -45,7 +45,11 @@ const AdminPortfolioPage = () => {
 
       <section>
         <div className="flex justify-between items-center my-3">
-          <Button icon={<PlusIcon />} iconPosition="right">
+          <Button
+            icon={<PlusIcon />}
+            iconPosition="right"
+            onClick={() => router.push("/admin/portfolio/new")}
+          >
             Add New Portfolio
           </Button>
 
