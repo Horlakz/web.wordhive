@@ -13,6 +13,7 @@ interface InputProps<T = HTMLInputElement> {
   name?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<T>) => void;
+  showLabel?: boolean;
 }
 
 interface TextAreaProps extends Omit<InputProps<HTMLTextAreaElement>, "type"> {
@@ -33,17 +34,20 @@ function Input({
   value,
   name,
   onChange,
+  showLabel = true,
 }: InputProps) {
   const id = label.toLowerCase().replace(" ", "_");
 
   return (
     <div className={className}>
-      <label
-        htmlFor={id}
-        className="block mb-2 text-sm font-medium text-dark-900"
-      >
-        {label}
-      </label>
+      {showLabel && (
+        <label
+          htmlFor={id}
+          className="block mb-2 text-sm font-medium text-dark-900"
+        >
+          {label}
+        </label>
+      )}
       <input
         type={type}
         id={id}
@@ -65,17 +69,21 @@ function TextArea({
   value,
   name,
   onChange,
+  showLabel = true,
 }: TextAreaProps) {
   const id = label.toLowerCase().replace(" ", "_");
 
   return (
     <div className={className}>
-      <label
-        htmlFor={id}
-        className="block mb-2 text-sm font-medium text-dark-900"
-      >
-        {label}
-      </label>
+      {showLabel && (
+        <label
+          htmlFor={id}
+          className="block mb-2 text-sm font-medium text-dark-900"
+        >
+          {label}
+        </label>
+      )}
+
       <textarea
         id={id}
         name={name || id}
@@ -97,6 +105,7 @@ function Select({
   value,
   name,
   onChange,
+  showLabel = true,
 }: SelectProps) {
   function ConvertLabelToDefaultOption(text: string) {
     const textToLowercase = text.toLocaleLowerCase();
@@ -113,12 +122,15 @@ function Select({
 
   return (
     <div className={className}>
-      <label
-        htmlFor={id}
-        className="block mb-2 text-sm font-medium text-gray-900"
-      >
-        {label}
-      </label>
+      {showLabel && (
+        <label
+          htmlFor={id}
+          className="block mb-2 text-sm font-medium text-gray-900"
+        >
+          {label}
+        </label>
+      )}
+
       <select
         id={id}
         name={name || id}
