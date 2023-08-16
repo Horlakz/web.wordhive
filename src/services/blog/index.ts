@@ -2,7 +2,7 @@ import { Client } from "../apiClient";
 
 export interface BlogData {
   title?: string;
-  category?: { uuid: string; name: string };
+  category?: { uuid: string; name: string } | string;
   body?: string;
 }
 
