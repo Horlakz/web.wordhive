@@ -1,25 +1,92 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { toast } from "react-hot-toast";
 
 import InputSearch from "@/components/admin/InputSearch";
 import Button from "@/components/common/Button";
+import InputGroup from "@/components/common/InputGroup";
+import Modal from "@/components/common/Modal";
 import Table from "@/components/common/Table";
 import ChevronLeftIcon from "@/components/icons/ChevronLeft";
 import ChevronRightIcon from "@/components/icons/ChevronRight";
 import PlusIcon from "@/components/icons/Plus";
+import { AuthService, UserAdminData } from "@/services/auth";
 import { UserData, UserService } from "@/services/auth/user";
 import { formatDate } from "@/utilities/date";
+import { randomString } from "@/utilities/random-string";
 
 const AdminServicePage = () => {
+  const [createAdminModal, setCreateAdminModal] = useState(false);
+  const [viewPasswordModal, setViewPasswordModal] = useState(false);
+  const [removeAdminModal, setRemoveAdminModal] = useState(false);
+  const [adminId, setAdminId] = useState("");
+  const [fullname, setFullname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const userService = new UserService();
+  const authService = new AuthService();
+  const queryClient = useQueryClient();
+  const formData: UserAdminData = { fullname, email, password, isAdmin: true };
 
-  const { data, isError, isLoading } = useQuery(
-    ["admins"],
-    async () => await userService.getAllAdmins()
+  function handleCopy() {
+    navigator.clipboard.writeText(password);
+    toast.success("Password copied to clipboard");
+  }
+
+  function handleCreateAdmin() {
+    setPassword(randomString());
+    createAdmin.mutate();
+  }
+
+  function handleRemoveAdmin() {
+    removeAdmin.mutate();
+  }
+
+  const createAdmin = useMutation(
+    async () => await authService.registerAdmin(formData),
+    {
+      onSuccess: () => {
+        toast.success("Admin created successfully");
+        setCreateAdminModal(false);
+        setViewPasswordModal(true);
+        queryClient.invalidateQueries(["admins"]);
+      },
+      onError: (error: any) => {
+        toast.error(
+          error.response.data.message ??
+            "An Error occured while registering admin"
+        );
+      },
+    }
   );
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError)
+  const removeAdmin = useMutation(
+    async () => await userService.deleteUser(adminId),
+    {
+      onSuccess: () => {
+        toast.success("Admin removed successfully");
+        setRemoveAdminModal(false);
+        queryClient.invalidateQueries(["admins"]);
+      },
+      onError: (error: any) => {
+        toast.error(
+          error.response.data.message ?? "An Error occured while removing admin"
+        );
+      },
+    }
+  );
+
+  const {
+    data: users,
+    isError,
+    isLoading,
+  } = useQuery(["admins"], async () => await userService.getAllAdmins());
+
+  const user = useQuery(["user"], async () => await userService.getProfile());
+
+  if (isLoading || user.isLoading) return <div>Loading...</div>;
+  if (isError || user.isError)
     return (
       <p className="text-red-600 text-lg">
         Any Error Occured while loading your data
@@ -34,7 +101,11 @@ const AdminServicePage = () => {
 
       <section>
         <div className="flex justify-between items-center my-3">
-          <Button icon={<PlusIcon />} iconPosition="right">
+          <Button
+            icon={<PlusIcon />}
+            iconPosition="right"
+            onClick={() => setCreateAdminModal(true)}
+          >
             Add New Admin
           </Button>
 
@@ -56,7 +127,7 @@ const AdminServicePage = () => {
             { title: "Remove Admin" },
           ]}
           tableKeys={["fullname", "email", "created_at"]}
-          tableData={data.data.map((user: UserData) => {
+          tableData={users.data.map((user: UserData) => {
             return {
               ...user,
               created_at: formatDate(user.created_at),
@@ -64,13 +135,145 @@ const AdminServicePage = () => {
           })}
           tableActions={[
             (data) => (
-              <Button variant="outline" colorScheme="danger">
+              <Button
+                variant="outline"
+                colorScheme="danger"
+                onClick={() => {
+                  if (user.data.data.email === data.email) {
+                    toast.error("You cannot remove yourself as an admin");
+                    return;
+                  }
+
+                  setAdminId(data.uuid);
+                  setRemoveAdminModal(true);
+                }}
+              >
                 Remove
               </Button>
             ),
           ]}
         />
       </section>
+
+      <Modal
+        visibility={createAdminModal}
+        setVisibility={() => setCreateAdminModal(false)}
+      >
+        <div className="p-12 space-y-4">
+          <p className="my-2 text-admin-primary text-center w-80">
+            Please note that admin will be required to verify email address
+            after creation to allow full access
+          </p>
+
+          <InputGroup.Input
+            label="Full name"
+            showLabel={false}
+            placeholder="Enter full name of admin"
+            value={fullname}
+            onChange={(e) => setFullname(e.target.value)}
+          />
+          <InputGroup.Input
+            label="Email Address"
+            showLabel={false}
+            placeholder="Enter email address of admin"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <div className="flex center gap-2">
+            <Button
+              variant="outline"
+              colorScheme="danger"
+              onClick={() => setCreateAdminModal(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              isLoading={createAdmin.isLoading}
+              onClick={handleCreateAdmin}
+            >
+              Add Admin
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        showCloseButton
+        visibility={viewPasswordModal}
+        setVisibility={() => {
+          setFullname("");
+          setEmail("");
+          setPassword("");
+          setViewPasswordModal(false);
+        }}
+      >
+        <div className="grid center text-center w-96 gap-6 p-12">
+          <h1 className="text-2xl font-semibold text-success mb-2">
+            Congratulations
+          </h1>
+          <p className="text-lg text-dark-600 font-medium">
+            Admin&nbsp;
+            <span className="font-semibold text-dark-900">{fullname}</span>
+            &nbsp;has been created and verification email has been sent to&nbsp;
+            <span className="font-semibold text-dark-900">{email}</span>
+          </p>
+          <p className="text-danger text-sm">
+            You can only view this password once, please copy and keep it safe
+          </p>
+          <button
+            onClick={handleCopy}
+            className="bg-dark-600 text-gray-200 p-2 gap-3 rounded-lg flex items-center"
+          >
+            <span className="text-lg">{password}</span>
+            <svg
+              width={24}
+              height={24}
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 11c0-2.828 0-4.243.879-5.121C7.757 5 9.172 5 12 5h3c2.828 0 4.243 0 5.121.879C21 6.757 21 8.172 21 11v5c0 2.828 0 4.243-.879 5.121C19.243 22 17.828 22 15 22h-3c-2.828 0-4.243 0-5.121-.879C6 20.243 6 18.828 6 16v-5z"
+                stroke="#f4f4f4"
+                strokeWidth={1.5}
+              />
+              <path
+                d="M6 19a3 3 0 01-3-3v-6c0-3.771 0-5.657 1.172-6.828C5.343 2 7.229 2 11 2h4a3 3 0 013 3"
+                stroke="#f4f4f4"
+                strokeWidth={1.5}
+              />
+            </svg>
+          </button>
+        </div>
+      </Modal>
+
+      <Modal
+        visibility={removeAdminModal}
+        setVisibility={() => setRemoveAdminModal(false)}
+      >
+        <div className="p-12 space-y-4">
+          <p className="my-2 text-danger text-center w-80">
+            Are you sure you want to remove admin?
+          </p>
+
+          <div className="flex center gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setRemoveAdminModal(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              colorScheme="danger"
+              isLoading={createAdmin.isLoading}
+              onClick={handleRemoveAdmin}
+            >
+              Remove Admin
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
