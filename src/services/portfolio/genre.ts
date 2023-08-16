@@ -9,7 +9,7 @@ export class PortfolioGenreService {
   private client: Client;
 
   constructor() {
-    this.client = new Client("/portfolio-genres");
+    this.client = new Client("/portfolio-genre");
   }
 
   async listPorfolioGenres() {
