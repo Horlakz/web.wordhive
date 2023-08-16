@@ -1,5 +1,23 @@
 import { Client } from "../apiClient";
 
+export interface ServiceQuality {
+  type: string;
+  price: number;
+}
+
+export interface ServiceVolume {
+  name: string;
+  qualities: ServiceQuality[];
+}
+
+export interface ServiceData {
+  title: string;
+  body: string;
+  icon: string;
+  category: string;
+  volumes: ServiceVolume[];
+}
+
 export class ApplicationService extends Client {
   constructor() {
     super("/service");
@@ -9,15 +27,11 @@ export class ApplicationService extends Client {
     return await this.get("");
   }
 
-//   async createPortfolio(data: PortfolioData) {
-//     return await this.post("", data);
-//   }
+  async createService(data: ServiceData) {
+    return await this.post("", data);
+  }
 
-//   async updatePortfolio(id: string, data: PortfolioData) {
-//     return await this.put(id, data);
-//   }
-
-//   async deletePortfolio(id: string) {
-//     return await this.delete(id);
-//   }
+  async deleteService(id: string) {
+    return await this.delete(id);
+  }
 }
