@@ -94,14 +94,14 @@ const AdminPortfolioPage = () => {
             { title: "Category" },
             { title: "Actions" },
           ]}
-          tableKeys={["name", "category"]}
+          tableKeys={["title", "category"]}
           tableData={portfolios.data.data.results.map((portfolio: any) => ({
             ...portfolio,
-            category: portfolio.category.name,
+            category: portfolio.field.name,
           }))}
           tableActions={[
-            (data) => (
-              <Link href={"/services/" + data.id}>
+            () => (
+              <Link href={"/portfolio/"}>
                 <Button variant="outline">View</Button>
               </Link>
             ),
