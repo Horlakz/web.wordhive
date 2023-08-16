@@ -1,10 +1,13 @@
 "use client";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "react-hot-toast";
 
 import InputSearch from "@/components/admin/InputSearch";
 import Button from "@/components/common/Button";
+import Modal from "@/components/common/Modal";
 import Table from "@/components/common/Table";
 import ChevronLeftIcon from "@/components/icons/ChevronLeft";
 import ChevronRightIcon from "@/components/icons/ChevronRight";
@@ -14,6 +17,8 @@ import { PortfolioFieldService } from "@/services/portfolio/field";
 
 const AdminPortfolioPage = () => {
   const router = useRouter();
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [id, setId] = useState("");
   const portfolioService = new PortfolioService();
   const portfolioServiceField = new PortfolioFieldService();
 
@@ -25,6 +30,27 @@ const AdminPortfolioPage = () => {
     ["fields"],
     async () => await portfolioServiceField.listPorfolioField()
   );
+
+  const removePortfolio = useMutation(
+    async () => await portfolioService.deletePortfolio(id),
+    {
+      onSuccess: () => {
+        portfolios.refetch();
+        setDeleteModal(false);
+        toast.success("Portfolio deleted successfully");
+      },
+      onError: (error: any) => {
+        toast.error(
+          error.response.data.message ??
+            "An error occured while deleting portfolio"
+        );
+      },
+    }
+  );
+
+  function handleRemovePortfolio() {
+    removePortfolio.mutate();
+  }
 
   const isLoading = portfolios.isLoading || fields.isLoading;
   const isError = portfolios.isError || fields.isError;
@@ -106,13 +132,44 @@ const AdminPortfolioPage = () => {
               </Link>
             ),
             (data) => (
-              <Button variant="outline" colorScheme="danger">
+              <Button
+                variant="outline"
+                colorScheme="danger"
+                onClick={() => {
+                  setId(data.uuid);
+                  setDeleteModal(true);
+                }}
+              >
                 Delete
               </Button>
             ),
           ]}
         />
       </section>
+
+      <Modal
+        visibility={deleteModal}
+        setVisibility={() => setDeleteModal(false)}
+      >
+        <div className="p-12 space-y-4">
+          <p className="my-2 text-danger text-center w-80">
+            Are you sure you want to remove porfolio?
+          </p>
+
+          <div className="flex center gap-2">
+            <Button variant="outline" onClick={() => setDeleteModal(false)}>
+              Cancel
+            </Button>
+            <Button
+              colorScheme="danger"
+              isLoading={removePortfolio.isLoading}
+              onClick={handleRemovePortfolio}
+            >
+              Delete
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
