@@ -2,6 +2,7 @@ import { Client } from "../apiClient";
 
 export interface ServiceCategoryData {
   name: string;
+  uuid?: string;
 }
 
 export class ApplicationServiceCategory extends Client {
