@@ -6,6 +6,10 @@ interface UserData {
   password: string;
 }
 
+export interface UserAdminData extends UserData {
+  isAdmin: boolean;
+}
+
 interface VerificationData extends Pick<UserData, "email"> {
   code: string;
   password?: string;
@@ -24,6 +28,10 @@ export class AuthService extends Client {
 
   register(data: UserData) {
     return this.post<UserData>("/register", data);
+  }
+
+  registerAdmin(data: UserAdminData) {
+    return this.post("/register-admin", data);
   }
 
   verifyEmail(data: VerificationData) {
