@@ -29,6 +29,10 @@ export class OrderService extends Client {
     return this.get(`verify/${payment_reference}`);
   }
 
+  viewOrder(reference: string) {
+    return this.get(reference);
+  }
+
   getUserOrders(id: string) {
     return this.get("user/" + id);
   }
