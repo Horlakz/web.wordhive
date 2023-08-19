@@ -162,7 +162,7 @@ const OrderDetailsPage: NextPage<Params> = ({ params }) => {
                 </div>
                 <span
                   className={classNames(
-                    "text-white px-2 py-1 w-fit rounded-md",
+                    "text-white px-2 py-1 h-fit rounded-md",
                     timeline.status ? "bg-order-blue" : "bg-gray-500"
                   )}
                 >
