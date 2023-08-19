@@ -33,6 +33,10 @@ export class OrderService extends Client {
     return this.get(reference);
   }
 
+  updateOrder(id: string, data: { status: string }) {
+    return this.patch(id, data);
+  }
+
   getUserOrders(id: string) {
     return this.get("user/" + id);
   }
