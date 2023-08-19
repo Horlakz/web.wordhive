@@ -86,40 +86,26 @@ const OrderDetailsPage: NextPage<Params> = ({ params }) => {
         </h2>
 
         <div className="my-4 space-y-4 pr-96 mr-64">
-          <div className="flex justify-between">
-            <span className="text-admin-primary font-medium">Ordered By:</span>
-            <span className="w-96">{viewOrder.data.data.user.fullname}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-admin-primary font-medium">
-              Service Name:
-            </span>
-            <span className="w-96">{viewOrder.data.data.service.title}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-admin-primary font-medium">Description:</span>
-            <span className="w-96">{viewOrder.data.data.service.body}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-admin-primary font-medium">
-              Volume (pages):
-            </span>
-            <span className="w-96">{viewOrder.data.data.serviceVolume}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-admin-primary font-medium">Quality:</span>
-            <span className="w-96">{viewOrder.data.data.serviceQuality}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-admin-primary font-medium">Price:</span>
-            <span className="w-96">{viewOrder.data.data.price}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-admin-primary font-medium">
-              Reference Number:
-            </span>
-            <span className="w-96">{reference}</span>
-          </div>
+          {[
+            { label: "Ordered By:", value: viewOrder.data.data.user.fullname },
+            {
+              label: "Service Name:",
+              value: viewOrder.data.data.service.title,
+            },
+            { label: "Description:", value: viewOrder.data.data.service.body },
+            {
+              label: "Volume (pages):",
+              value: viewOrder.data.data.serviceVolume,
+            },
+            { label: "Quality:", value: viewOrder.data.data.serviceQuality },
+            { label: "Price:", value: viewOrder.data.data.price },
+            { label: "Reference Number:", value: reference },
+          ].map(({ label, value }, index) => (
+            <div key={index} className="flex justify-between">
+              <span className="text-admin-primary font-medium">{label}</span>
+              <span className="w-96">{value}</span>
+            </div>
+          ))}
         </div>
       </div>
 
