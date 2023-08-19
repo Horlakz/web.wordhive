@@ -68,7 +68,7 @@ function AccountPage() {
                   <p className="text-dark-600 text-xl font-semibold mb-4">
                     You have no orders yet
                   </p>
-                  <Button>Shop Now</Button>
+                  <Button href="/services">Shop Now</Button>
                 </div>
               )}
             </section>
