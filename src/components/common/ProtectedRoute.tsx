@@ -11,13 +11,14 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!storage.checkCookie("access")) {
+    const accessCookie = storage.getCookie("access");
+    if (!accessCookie) {
       router.push("/");
-      toast("You need to login to access this page", {
+      toast.error("You need to login to access this page", {
         icon: "🔒",
       });
     }
-  });
+  }, [router, storage]);
 
   return <>{children}</>;
 };
