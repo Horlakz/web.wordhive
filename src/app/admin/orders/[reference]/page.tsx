@@ -1,18 +1,22 @@
 "use client";
 
-import type { NextPage } from "next";
-import React from "react";
-import { useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import classNames from "classnames";
+import type { NextPage } from "next";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "react-hot-toast";
 
+import tickCircleGrayIcon from "@/assets/icons/tick-circle-gray.svg";
+import tickCircleIcon from "@/assets/icons/tick-circle.svg";
+import { StatusDetails } from "@/components/account/OrderCard";
 import ChevronLeftIcon from "@/components/icons/ChevronLeft";
 import { OrderService } from "@/services/order";
-import { StatusDetails } from "@/components/account/OrderCard";
-import tickCircleIcon from "@/assets/icons/tick-circle.svg";
-import tickCircleGrayIcon from "@/assets/icons/tick-circle-gray.svg";
 import { formatDate } from "@/utilities/date";
+import ConfirmOrderModal from "./ConfirmOrderModal";
+import StatusBtn from "./StatusBtn";
+import UpdateOrderModal from "./UpdateOrderModal";
 
 interface Params {
   params: {
@@ -23,11 +27,30 @@ interface Params {
 const OrderDetailsPage: NextPage<Params> = ({ params }) => {
   const orderService = new OrderService();
   const router = useRouter();
+  const [confirmOrderModal, setConfirmOrderModal] = useState(false);
+  const [updateOrderModal, setUpdateOrderModal] = useState(false);
   const { reference } = params;
 
   const viewOrder = useQuery(
     ["order", reference],
     async () => await orderService.viewOrder(reference)
+  );
+
+  const updateOrder = useMutation(
+    async (status: string) =>
+      await orderService.updateOrder(viewOrder.data?.data.uuid, { status }),
+    {
+      onSuccess: () => {
+        setConfirmOrderModal(false);
+        setUpdateOrderModal(false);
+        viewOrder.refetch();
+        toast.success("Order updated successfully");
+      },
+      onError: (err: any) =>
+        toast.error(
+          err?.response?.data.message ?? "An error occured while updating order"
+        ),
+    }
   );
 
   const status: Record<string, StatusDetails> = {
@@ -146,6 +169,7 @@ const OrderDetailsPage: NextPage<Params> = ({ params }) => {
                     alt="tick circle"
                   />
                 </div>
+
                 <span
                   className={classNames(
                     "text-white px-2 py-1 h-fit rounded-md",
@@ -154,16 +178,44 @@ const OrderDetailsPage: NextPage<Params> = ({ params }) => {
                 >
                   {notConfirmed ? "Payment not successful" : timeline.name}
                 </span>
-                <span className="text-dark-600">
-                  {timeline.timestamp == null
-                    ? ""
-                    : formatDate(timeline.timestamp)}
-                </span>
+
+                {timeline.timestamp == null ? (
+                  timeline.name == "Work in Progress" ? (
+                    <StatusBtn onClick={() => setConfirmOrderModal(true)}>
+                      Confirm Order
+                    </StatusBtn>
+                  ) : (
+                    timeline.name == "Out for delivery" && (
+                      <StatusBtn
+                        disabled={status["workInProgress"].status !== true}
+                        onClick={() => setUpdateOrderModal(true)}
+                      >
+                        update order
+                      </StatusBtn>
+                    )
+                  )
+                ) : (
+                  <span className="text-dark-600">
+                    {formatDate(timeline.timestamp)}
+                  </span>
+                )}
               </div>
             );
           })}
         </div>
       </div>
+
+      <ConfirmOrderModal
+        modal={confirmOrderModal}
+        setModal={setConfirmOrderModal}
+        mutation={updateOrder}
+      />
+
+      <UpdateOrderModal
+        modal={updateOrderModal}
+        setModal={setUpdateOrderModal}
+        mutation={updateOrder}
+      />
     </div>
   );
 };
