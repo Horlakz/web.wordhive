@@ -61,7 +61,7 @@ const AdminOrderPage = () => {
           })}
           tableActions={[
             (data) => (
-              <Link href={"/admin/orders/" + data.uuid}>
+              <Link href={"/admin/orders/" + data.reference}>
                 <Button variant="outline">View Details</Button>,
               </Link>
             ),
