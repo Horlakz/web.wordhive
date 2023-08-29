@@ -17,12 +17,12 @@ export class UserService extends Client {
     return this.get("");
   }
 
-  getAllUsers() {
-    return this.get("all");
+  getAllUsers(name: string, page: number = 1, limit: number = 10) {
+    return this.get("all", { params: { name, page, limit } });
   }
 
-  getAllAdmins() {
-    return this.get("admin");
+  getAllAdmins(name: string) {
+    return this.get("admin", { params: { name } });
   }
 
   getUser(uuid: string) {
