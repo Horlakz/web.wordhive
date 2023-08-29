@@ -21,12 +21,13 @@ export function useFormData() {
 }
 
 export function useFAQ() {
+  const [search, setSearch] = useState("");
   const { formData, id, setId, setForm, setModal } = useContext(FaqContext);
   const faqService = new FaqService();
 
   const { data, status, refetch } = useQuery(
-    ["faqs"],
-    async () => await faqService.listFaq()
+    ["faqs", search],
+    async () => await faqService.listFaq(search)
   );
 
   function onSuccess(message: string) {
@@ -60,5 +61,5 @@ export function useFAQ() {
     onSuccess: () => onSuccess("deleted"),
     onError,
   });
-  return { data, status, create, update, remove };
+  return { data, status, create, update, remove, search, setSearch };
 }

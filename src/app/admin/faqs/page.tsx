@@ -9,21 +9,24 @@ import { FaqProvider } from "./context";
 import { useFAQ } from "./hook";
 
 const FAQsPage = () => {
-  const { data, status } = useFAQ();
+  const { data, status, search, setSearch } = useFAQ();
 
   return (
-    <PreLoader status={status}>
-      <FaqProvider>
-        <div>
-          <section className="w-full flex-center py-6">
-            <InputSearch />
-          </section>
+    <FaqProvider>
+      <div>
+        <section className="w-full flex-center py-6">
+          <InputSearch
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </section>
 
-          <section>
-            <div className="flex items-center my-3">
-              <AddBtn />
-            </div>
+        <section>
+          <div className="flex items-center my-3">
+            <AddBtn />
+          </div>
 
+          <PreLoader status={status}>
             <Table
               tableHeaders={[
                 { title: "Question" },
@@ -37,12 +40,12 @@ const FAQsPage = () => {
                 (data) => <DeleteBtn data={data} />,
               ]}
             />
-          </section>
-        </div>
+          </PreLoader>
+        </section>
+      </div>
 
-        <FormModal />
-      </FaqProvider>
-    </PreLoader>
+      <FormModal />
+    </FaqProvider>
   );
 };
 
