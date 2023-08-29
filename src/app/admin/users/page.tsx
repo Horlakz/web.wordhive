@@ -18,7 +18,7 @@ const AdminUsersPage = () => {
   const [page, setPage] = useState(1);
 
   const { data, status } = useQuery(
-    ["users", search],
+    ["users", search, page],
     async () => await userService.getAllUsers(search, page)
   );
 

@@ -15,8 +15,8 @@ export class PortfolioService extends Client {
     super("/portfolio");
   }
 
-  async listPortfolios() {
-    return await this.get("");
+  async listPortfolios(category: string, name: string, page = 1) {
+    return await this.get("", { params: { category, name, page, limit: 10 } });
   }
 
   async createPortfolio(data: PortfolioData) {
