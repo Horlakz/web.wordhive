@@ -1,6 +1,6 @@
 import { Client } from "../apiClient";
 
-interface FaqData {
+export interface FaqData {
   question: string;
   answer: string;
 }
