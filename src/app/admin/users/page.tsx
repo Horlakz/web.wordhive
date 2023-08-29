@@ -2,75 +2,72 @@
 
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+import { useState } from "react";
 
 import InputSearch from "@/components/admin/InputSearch";
+import PaginationButtons from "@/components/admin/PaginationButtons";
+import PreLoader from "@/components/admin/PreLoader";
 import Button from "@/components/common/Button";
 import Table from "@/components/common/Table";
-import ChevronLeftIcon from "@/components/icons/ChevronLeft";
-import ChevronRightIcon from "@/components/icons/ChevronRight";
 import { UserData, UserService } from "@/services/auth/user";
 import { formatDate } from "@/utilities/date";
 
 const AdminUsersPage = () => {
   const userService = new UserService();
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
 
-  const { data, isError, isLoading } = useQuery(
-    ["users"],
-    async () => await userService.getAllUsers()
+  const { data, status } = useQuery(
+    ["users", search],
+    async () => await userService.getAllUsers(search, page)
   );
-
-  if (isLoading) return <div>Loading...</div>;
-  if (isError)
-    return (
-      <p className="text-red-600 text-lg">
-        Any Error Occured while loading your data
-      </p>
-    );
 
   return (
     <div>
       <section className="w-full flex-center py-6">
-        <InputSearch />
+        <InputSearch
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       </section>
 
       <section>
         <div className="flex justify-end items-center">
-          <div className="flex justify-end items-center">
-            <Button variant="outline" className="border-none">
-              <ChevronLeftIcon />
-            </Button>
-            <span className="text-dark-600">1 - 20 of 100</span>
-            <Button variant="outline" className="border-none">
-              <ChevronRightIcon />
-            </Button>
-          </div>
+          <PaginationButtons
+            page={page}
+            setPage={setPage}
+            pagination={data?.data.pagination}
+          />
         </div>
-        <Table
-          tableHeaders={[
-            { title: "Full Name" },
-            { title: "Email Address" },
-            { title: "Email Verified" },
-            { title: "Date Joined" },
-            { title: "View Orders" },
-          ]}
-          tableKeys={["fullname", "email", "isEmailVerified", "created_at"]}
-          tableData={data.data.map((user: UserData) => {
-            return {
-              ...user,
-              created_at: formatDate(user.created_at),
-              isEmailVerified: user.isEmailVerified ? "Yes" : "No",
-            };
-          })}
-          tableActions={[
-            (data) => {
-              return (
-                <Link href={"/admin/users/" + data.uuid}>
-                  <Button variant="outline">View</Button>
-                </Link>
-              );
-            },
-          ]}
-        />
+
+        <PreLoader status={status}>
+          <Table
+            tableHeaders={[
+              { title: "Full Name" },
+              { title: "Email Address" },
+              { title: "Email Verified" },
+              { title: "Date Joined" },
+              { title: "View Orders" },
+            ]}
+            tableKeys={["fullname", "email", "isEmailVerified", "created_at"]}
+            tableData={data?.data.results.map((user: UserData) => {
+              return {
+                ...user,
+                created_at: formatDate(user.created_at),
+                isEmailVerified: user.isEmailVerified ? "Yes" : "No",
+              };
+            })}
+            tableActions={[
+              (data) => {
+                return (
+                  <Link href={"/admin/users/" + data.uuid}>
+                    <Button variant="outline">View</Button>
+                  </Link>
+                );
+              },
+            ]}
+          />
+        </PreLoader>
       </section>
     </div>
   );
