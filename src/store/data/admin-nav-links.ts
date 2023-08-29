@@ -12,6 +12,6 @@ export const adminNavLinks = [
   { name: "Orders", icon: shoppingCart, path: "/orders" },
   { name: "Blogs", icon: cardEdit, path: "/blogs" },
   { name: "Portfolio", icon: document, path: "/portfolio" },
-  { name: "FAQ", icon: question, path: "/faq" },
+  { name: "FAQ", icon: question, path: "/faqs" },
   { name: "Admin Management", icon: cpuSetting, path: "/admin-management" },
 ];
