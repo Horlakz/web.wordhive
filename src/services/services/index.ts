@@ -23,8 +23,8 @@ export class ApplicationService extends Client {
     super("/service");
   }
 
-  async listServices() {
-    return await this.get("");
+  async listServices(category: string, name: string, page = 1) {
+    return await this.get("", { params: { category, name, page, limit: 10 } });
   }
 
   async createService(data: ServiceData) {
