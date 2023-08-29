@@ -10,8 +10,8 @@ export class FaqService extends Client {
     super("/faq/");
   }
 
-  listFaq() {
-    return this.get("");
+  listFaq(search: string) {
+    return this.get("", { params: { search } });
   }
 
   createFaq(data: FaqData) {
