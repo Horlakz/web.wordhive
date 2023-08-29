@@ -28,7 +28,7 @@ export function UpdateBtn({ data }: { data: FaqData & { uuid: string } }) {
   return (
     <Button
       onClick={() => {
-        setForm(data);
+        setForm({ question: data.question, answer: data.answer });
         setId(data.uuid);
         setModal(true);
         setFormFunction(FormFunction.Update);
