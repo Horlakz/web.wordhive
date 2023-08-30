@@ -5,12 +5,12 @@ import { toast } from "react-hot-toast";
 
 import DeleteModal from "@/components/admin/DeleteModal";
 import InputSearch from "@/components/admin/InputSearch";
+import PaginationButtons from "@/components/admin/PaginationButtons";
+import PreLoader from "@/components/admin/PreLoader";
 import Button from "@/components/common/Button";
 import InputGroup from "@/components/common/InputGroup";
 import Modal from "@/components/common/Modal";
 import Table from "@/components/common/Table";
-import ChevronLeftIcon from "@/components/icons/ChevronLeft";
-import ChevronRightIcon from "@/components/icons/ChevronRight";
 import ClipboardIcon from "@/components/icons/Clipboard";
 import PlusIcon from "@/components/icons/Plus";
 import { AuthService, UserAdminData } from "@/services/auth";
@@ -26,6 +26,8 @@ const AdminServicePage = () => {
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
   const userService = new UserService();
   const authService = new AuthService();
   const queryClient = useQueryClient();
@@ -75,26 +77,20 @@ const AdminServicePage = () => {
     }
   );
 
-  const {
-    data: users,
-    isError,
-    isLoading,
-  } = useQuery(["admins"], async () => await userService.getAllAdmins());
+  const { data: users, status } = useQuery(
+    ["admins", search, page],
+    async () => await userService.getAllAdmins(search, page, 10)
+  );
 
   const user = useQuery(["user"], async () => await userService.getProfile());
-
-  if (isLoading || user.isLoading) return <div>Loading...</div>;
-  if (isError || user.isError)
-    return (
-      <p className="text-red-600 text-lg">
-        Any Error Occured while loading your data
-      </p>
-    );
 
   return (
     <div>
       <section className="w-full flex-center py-6">
-        <InputSearch />
+        <InputSearch
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       </section>
 
       <section>
@@ -107,50 +103,48 @@ const AdminServicePage = () => {
             Add New Admin
           </Button>
 
-          <div className="flex justify-end items-center">
-            <Button variant="outline" className="border-none">
-              <ChevronLeftIcon />
-            </Button>
-            <span className="text-dark-600">1 - 20 of 100</span>
-            <Button variant="outline" className="border-none">
-              <ChevronRightIcon />
-            </Button>
-          </div>
+          <PaginationButtons
+            page={page}
+            setPage={setPage}
+            pagination={users?.data.pagination}
+          />
         </div>
-        <Table
-          tableHeaders={[
-            { title: "Full Name" },
-            { title: "Email Address" },
-            { title: "Date Added" },
-            { title: "Remove Admin" },
-          ]}
-          tableKeys={["fullname", "email", "created_at"]}
-          tableData={users.data.map((user: UserData) => {
-            return {
-              ...user,
-              created_at: formatDate(user.created_at),
-            };
-          })}
-          tableActions={[
-            (data) => (
-              <Button
-                variant="outline"
-                colorScheme="danger"
-                onClick={() => {
-                  if (user.data.data.email === data.email) {
-                    toast.error("You cannot remove yourself as an admin");
-                    return;
-                  }
+        <PreLoader status={status}>
+          <Table
+            tableHeaders={[
+              { title: "Full Name" },
+              { title: "Email Address" },
+              { title: "Date Added" },
+              { title: "Remove Admin" },
+            ]}
+            tableKeys={["fullname", "email", "created_at"]}
+            tableData={users?.data.results.map((user: UserData) => {
+              return {
+                ...user,
+                created_at: formatDate(user.created_at),
+              };
+            })}
+            tableActions={[
+              (data) => (
+                <Button
+                  variant="outline"
+                  colorScheme="danger"
+                  onClick={() => {
+                    if (user?.data?.data.email === data.email) {
+                      toast.error("You cannot remove yourself as an admin");
+                      return;
+                    }
 
-                  setAdminId(data.uuid);
-                  setRemoveAdminModal(true);
-                }}
-              >
-                Remove
-              </Button>
-            ),
-          ]}
-        />
+                    setAdminId(data.uuid);
+                    setRemoveAdminModal(true);
+                  }}
+                >
+                  Remove
+                </Button>
+              ),
+            ]}
+          />
+        </PreLoader>
       </section>
 
       {/* admin creation modal */}

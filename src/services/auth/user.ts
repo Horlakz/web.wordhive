@@ -21,8 +21,8 @@ export class UserService extends Client {
     return this.get("all", { params: { name, page, limit } });
   }
 
-  getAllAdmins(name: string) {
-    return this.get("admin", { params: { name } });
+  getAllAdmins(name: string, page: number = 1, limit: number = 10) {
+    return this.get("admin", { params: { name, page, limit } });
   }
 
   getUser(uuid: string) {
