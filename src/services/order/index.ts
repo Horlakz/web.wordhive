@@ -17,8 +17,8 @@ export class OrderService extends Client {
     return this.get("");
   }
 
-  listAllOrders() {
-    return this.get("all");
+  listAllOrders(reference: string, page: number = 1) {
+    return this.get("all", { params: { reference, page, limit: 10 } });
   }
 
   createOrder(data: OrderData) {
