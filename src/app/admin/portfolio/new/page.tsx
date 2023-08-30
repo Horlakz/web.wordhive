@@ -17,6 +17,7 @@ import {
   PortfolioFieldService,
 } from "@/services/portfolio/field";
 import { PortfolioGenreService } from "@/services/portfolio/genre";
+import BackButton from "@/components/admin/BackButton";
 
 const CreateNewPortfolioPage = () => {
   const router = useRouter();
@@ -70,10 +71,7 @@ const CreateNewPortfolioPage = () => {
   return (
     <div>
       <div className="w-full flex justify-start mb-8">
-        <Link href="/admin/users" className="flex-center gap-1 text-dark-600">
-          <ChevronLeftIcon width={18} height={18} strokeColor="#525252" />
-          <span>Go Back</span>
-        </Link>
+        <BackButton />
       </div>
 
       <h2 className="text-xl font-semibold">Post New Portfolio</h2>

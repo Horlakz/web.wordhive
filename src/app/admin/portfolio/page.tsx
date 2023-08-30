@@ -1,7 +1,7 @@
 "use client";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 
@@ -14,20 +14,22 @@ import Table from "@/components/common/Table";
 import PlusIcon from "@/components/icons/Plus";
 import { PortfolioService } from "@/services/portfolio";
 import { PortfolioFieldService } from "@/services/portfolio/field";
+import SortByCategory from "@/components/admin/SortByCategory";
 
 const AdminPortfolioPage = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const [deleteModal, setDeleteModal] = useState(false);
   const [id, setId] = useState("");
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("");
+  const [field, setField] = useState("");
   const [page, setPage] = useState(1);
   const portfolioService = new PortfolioService();
   const portfolioServiceField = new PortfolioFieldService();
 
   const portfolios = useQuery(
-    ["portfolios", search, category, page],
-    async () => await portfolioService.listPortfolios(category, search, page)
+    ["portfolios", search, field, page],
+    async () => await portfolioService.listPortfolios(field, search, page)
   );
   const fields = useQuery(
     ["fields"],
@@ -69,34 +71,12 @@ const AdminPortfolioPage = () => {
             Add New Portfolio
           </Button>
 
-          <div className="flex items-center gap-4">
-            <label htmlFor="field">Sort by Field: </label>
-            <select
-              name="field"
-              id="field"
-              className="bg-white drop-shadow-md p-3"
-              onChange={(e) => {
-                if (e.target.value === "manage-categories") {
-                  router.push("/admin/portfolio/fields");
-                } else if (e.target.value == "all") {
-                  setCategory("");
-                } else {
-                  setCategory(e.target.value);
-                }
-              }}
-            >
-              {fields.data?.data?.map(
-                (field: { uuid: string; name: string }) => (
-                  <option key={field.uuid} value={field.uuid}>
-                    {field.name}
-                  </option>
-                )
-              )}
-              <option value="manage-categories" className="text-sm">
-                Manage Fields
-              </option>
-            </select>
-          </div>
+          <SortByCategory
+            name="Field"
+            data={fields.data?.data}
+            setCategory={setField}
+            pageUrl={pathname.replace("/admin", "")}
+          />
 
           <PaginationButtons
             page={page}
