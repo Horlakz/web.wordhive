@@ -84,6 +84,7 @@ const AdminBlogPage = () => {
                 : blogs.data?.data.results.map((blog: Required<BlogData>) => ({
                     ...blog,
                     category: (blog.category as { name: string }).name,
+                    category_id: (blog.category as { uuid: string }).uuid,
                   }))
             }
             tableActions={[
@@ -93,7 +94,7 @@ const AdminBlogPage = () => {
                     router.push("/admin/blogs/" + data.slug);
                     setForm({
                       title: data.title,
-                      category: data.category,
+                      category: data.category_id,
                       body: data.body,
                     });
                   }}
