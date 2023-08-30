@@ -104,6 +104,7 @@ const Header = () => {
             if (isAuth) {
               storage.removeCookie("access");
               router.push("/");
+              router.refresh();
             } else {
               setModal(true);
             }
