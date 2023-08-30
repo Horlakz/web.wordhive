@@ -99,7 +99,7 @@ const ViewBlog: NextPage<Params> = async ({ params }) => {
       <section className="sm:grid hidden gap-4 border-t-4 border-primary w-2/5 py-5">
         <h2 className="font-semibold text-2xl text-primary">Latest Blogs</h2>
 
-        {blogs.data.map((blog: BlogData, i: Key) => {
+        {blogs.data.results.map((blog: BlogData, i: Key) => {
           return (
             <BlogCard
               key={i}

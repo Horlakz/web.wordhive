@@ -23,6 +23,10 @@ function PostComment({ slug }: { slug: string }) {
         handleChange({
           target: { name: "message", value: "" },
         } as React.ChangeEvent<HTMLTextAreaElement>);
+
+        handleChange({
+          target: { name: "fullname", value: "" },
+        } as React.ChangeEvent<HTMLTextAreaElement>);
         toast.success("Comment posted");
         router.refresh();
       },

@@ -10,7 +10,7 @@ const portfolioService = new PortfolioService();
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const Portfolio = async () => {
-  const { data } = await portfolioService.listPortfolios();
+  const { data } = await portfolioService.listPortfolios("", "");
 
   return (
     <main className="grid sm:grid-cols-3 sm:p-10 p-6 gap-10">

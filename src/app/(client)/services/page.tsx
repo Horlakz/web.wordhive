@@ -1,4 +1,5 @@
 import { StaticImageData } from "next/image";
+// import { useState } from "react";
 
 import dummy from "@/assets/images/dummy.png";
 import ServiceCard from "@/components/services/Card";
@@ -25,7 +26,8 @@ interface ServicesData {
 [];
 
 const ServicesPage = async () => {
-  const servicesData = await applicationService.listServices();
+  // const [category, setCategory] = useState("");
+  const servicesData = await applicationService.listServices("", "");
   const categoriesData =
     await applicationServiceCategory.listServiceCategories();
 
@@ -48,7 +50,7 @@ const ServicesPage = async () => {
       </section>
 
       <section className="grid sm:grid-cols-3 gap-10 py-5">
-        {services.data.map((service: ServicesData) => (
+        {services.data.results.map((service: ServicesData) => (
           <ServiceCard
             id={service.uuid}
             key={service.uuid}

@@ -7,6 +7,8 @@ import {
   BlogCategoryService,
 } from "@/services/blog/category";
 import { formatDate } from "@/utilities/date";
+import Pagination from "./Pagination";
+import { useBlog } from "./hook";
 
 const blogService = new BlogService();
 const blogCategoryService = new BlogCategoryService();
@@ -20,6 +22,7 @@ interface BlogData {
 }
 
 const Blog = async () => {
+  // const { page } = useBlog();
   const blogData = blogService.listBlog();
   const categoriesData = blogCategoryService.listBlogCategory();
 
@@ -39,7 +42,7 @@ const Blog = async () => {
       </section>
 
       <section className="grid sm:grid-cols-3 gap-10 py-5">
-        {blogs.data.map((blog: BlogData, i: Key) => {
+        {blogs.data.results.map((blog: BlogData, i: Key) => {
           return (
             <BlogCard
               key={i}
@@ -51,6 +54,10 @@ const Blog = async () => {
             />
           );
         })}
+      </section>
+
+      <section className="flex-center flex-wrap gap-5">
+        <Pagination />
       </section>
     </main>
   );
