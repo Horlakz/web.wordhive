@@ -6,15 +6,21 @@ export interface BlogData {
   body?: string;
 }
 
+export interface BlogAPIParams {
+  category: string;
+  search: string;
+  page: number;
+  limit: number;
+}
+
 export class BlogService extends Client {
   constructor() {
     super("/blog/");
   }
 
-  listBlog() {
-    return this.get("");
+  listBlog(params: Partial<BlogAPIParams> = { limit: 10 }) {
+    return this.get("", { params });
   }
-
   getBlog(slug: string) {
     return this.get(slug);
   }

@@ -1,61 +1,48 @@
 "use client";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { toast } from "react-hot-toast";
+
+import { usePathname, useRouter } from "next/navigation";
+import { useContext } from "react";
 
 import DeleteModal from "@/components/admin/DeleteModal";
 import InputSearch from "@/components/admin/InputSearch";
+import PaginationButtons from "@/components/admin/PaginationButtons";
+import PreLoader from "@/components/admin/PreLoader";
+import SortByCategory from "@/components/admin/SortByCategory";
 import Button from "@/components/common/Button";
 import Table from "@/components/common/Table";
-import ChevronLeftIcon from "@/components/icons/ChevronLeft";
-import ChevronRightIcon from "@/components/icons/ChevronRight";
 import PlusIcon from "@/components/icons/Plus";
-import { BlogData, BlogService } from "@/services/blog";
-import { BlogCategoryService } from "@/services/blog/category";
+import { BlogData } from "@/services/blog";
+import { BlogContext } from "./context";
+import { useBlog, INITIAL_FORM } from "./hook";
 
 const AdminBlogPage = () => {
   const router = useRouter();
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [id, setId] = useState("");
-  const blogService = new BlogService();
-  const blogServiceCategory = new BlogCategoryService();
-
-  const blogs = useQuery(["blogs"], async () => await blogService.listBlog());
-  const categories = useQuery(
-    ["categories"],
-    async () => await blogServiceCategory.listBlogCategory()
-  );
-
-  const removeBlog = useMutation(async () => await blogService.deleteBlog(id), {
-    onSuccess: () => {
-      blogs.refetch();
-      setDeleteModal(false);
-      toast.success("Blog deleted successfully");
-    },
-    onError: (error: any) => {
-      toast.error(
-        error.response.data.message ?? "An error occured while deleting Blog"
-      );
-    },
-  });
-
-  const isLoading = blogs.isLoading || categories.isLoading;
-  const isError = blogs.isError || categories.isError;
-
-  if (isLoading) return <div>Loading...</div>;
-  if (isError)
-    return (
-      <p className="text-red-600 text-lg">
-        Any Error Occured while loading your data
-      </p>
-    );
+  const pathname = usePathname();
+  const { setForm } = useContext(BlogContext);
+  const {
+    blogs,
+    categories,
+    remove,
+    search,
+    page,
+    modal,
+    setPage,
+    setSearch,
+    setCategory,
+    setSlug,
+    setModal,
+  } = useBlog();
 
   return (
     <div>
       <section className="w-full flex-center py-6">
-        <InputSearch />
+        <InputSearch
+          value={search}
+          onChange={(e) => {
+            setPage(1);
+            setSearch(e.target.value);
+          }}
+        />
       </section>
 
       <section>
@@ -63,85 +50,78 @@ const AdminBlogPage = () => {
           <Button
             icon={<PlusIcon />}
             iconPosition="right"
-            onClick={() => router.push("/admin/blogs/new")}
+            onClick={() => {
+              setForm(INITIAL_FORM);
+              router.push("/admin/blogs/new");
+            }}
           >
             Add New Blog Post
           </Button>
 
-          <div className="flex items-center gap-4">
-            <label htmlFor="category">Sort by category: </label>
-            <select
-              name="category"
-              id="category"
-              className="bg-white drop-shadow-md p-3"
-              onChange={(e) => {
-                if (e.target.value === "manage-categories") {
-                  router.push("/admin/blogs/categories");
-                } else {
-                  return;
-                }
-              }}
-            >
-              {categories.data.data.map(
-                (category: { uuid: string; name: string }) => (
-                  <option key={category.uuid} value={category.uuid}>
-                    {category.name}
-                  </option>
-                )
-              )}
-              <option value="manage-categories" className="text-sm">
-                Manage Categories
-              </option>
-            </select>
-          </div>
+          <SortByCategory
+            data={categories.data?.data}
+            setCategory={setCategory}
+            pageUrl={pathname.replace("/admin", "")}
+          />
 
-          <div className="flex justify-end items-center">
-            <Button variant="outline" className="border-none">
-              <ChevronLeftIcon strokeColor="#d4d4d4" />
-            </Button>
-            <span className="text-dark-600">1 - 20 of 100</span>
-            <Button variant="outline" className="border-none">
-              <ChevronRightIcon />
-            </Button>
-          </div>
+          <PaginationButtons
+            page={page}
+            setPage={setPage}
+            pagination={blogs.data?.data.pagination}
+          />
         </div>
-        <Table
-          tableHeaders={[
-            { title: "Blog Post Title" },
-            { title: "Category" },
-            { title: "Actions" },
-          ]}
-          tableKeys={["title", "category"]}
-          tableData={blogs.data.data.map((blog: Required<BlogData>) => ({
-            ...blog,
-            category: (blog.category as { name: string }).name,
-          }))}
-          tableActions={[
-            (data) => (
-              <Link href={"/blog/" + data.slug}>
-                <Button variant="outline">View</Button>
-              </Link>
-            ),
-            (data) => (
-              <Button
-                variant="outline"
-                colorScheme="danger"
-                onClick={() => {
-                  setId(data.uuid);
-                  setDeleteModal(true);
-                }}
-              >
-                Delete
-              </Button>
-            ),
-          ]}
-        />
+        <PreLoader status={blogs.status}>
+          <Table
+            tableHeaders={[
+              { title: "Blog Post Title" },
+              { title: "Category" },
+              { title: "Actions" },
+            ]}
+            tableKeys={["title", "category"]}
+            tableData={
+              blogs.data?.data.pagination.total == 0
+                ? []
+                : blogs.data?.data.results.map((blog: Required<BlogData>) => ({
+                    ...blog,
+                    category: (blog.category as { name: string }).name,
+                  }))
+            }
+            tableActions={[
+              (data) => (
+                <Button
+                  onClick={() => {
+                    router.push("/admin/blogs/" + data.slug);
+                    setForm({
+                      title: data.title,
+                      category: data.category,
+                      body: data.body,
+                    });
+                  }}
+                >
+                  Update
+                </Button>
+              ),
+              (data) => (
+                <Button
+                  variant="outline"
+                  colorScheme="danger"
+                  onClick={() => {
+                    setSlug(data.uuid);
+                    setModal(true);
+                  }}
+                >
+                  Delete
+                </Button>
+              ),
+            ]}
+          />
+        </PreLoader>
       </section>
 
       <DeleteModal
-        deleteModal={deleteModal}
-        setDeleteModal={setDeleteModal}
-        remove={removeBlog}
+        deleteModal={modal}
+        setDeleteModal={setModal}
+        remove={remove}
         title="blog"
       />
     </div>

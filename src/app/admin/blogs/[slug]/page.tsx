@@ -8,10 +8,17 @@ import InputGroup from "@/components/common/InputGroup";
 import { BlogCategoryData } from "@/services/blog/category";
 import { BlogContext } from "../context";
 import { useBlog } from "../hook";
+import { NextPage } from "next";
 
-const CreateNewBlogPage = () => {
+interface Params {
+  params: {
+    slug: string;
+  };
+}
+
+const UpdateBlogPage: NextPage<Params> = ({ params }) => {
   const { formData, setForm } = useContext(BlogContext);
-  const { categories, create } = useBlog();
+  const { categories, update, setSlug } = useBlog();
 
   return (
     <div>
@@ -19,7 +26,7 @@ const CreateNewBlogPage = () => {
         <BackButton />
       </div>
 
-      <h2 className="text-xl font-semibold">Create Blog Post</h2>
+      <h2 className="text-xl font-semibold">Update Blog Post</h2>
       <PreLoader status={categories.status}>
         <form className="space-y-6 my-4 w-[50rem]">
           <div className="w-full flex gap-6">
@@ -56,10 +63,13 @@ const CreateNewBlogPage = () => {
 
           <Button
             className="bg-admin-primary"
-            isLoading={create.isLoading}
-            onClick={() => create.mutate()}
+            isLoading={update.isLoading}
+            onClick={() => {
+              setSlug(params.slug);
+              update.mutate();
+            }}
           >
-            Create
+            Update
           </Button>
         </form>
       </PreLoader>
@@ -67,4 +77,4 @@ const CreateNewBlogPage = () => {
   );
 };
 
-export default CreateNewBlogPage;
+export default UpdateBlogPage;
