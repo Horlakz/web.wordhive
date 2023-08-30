@@ -18,7 +18,7 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
         icon: "🔒",
       });
     }
-  }, [router, storage]);
+  }, [router, storage, accessCookie]);
 
   return <>{children}</>;
 };
