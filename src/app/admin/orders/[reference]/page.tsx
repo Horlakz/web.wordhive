@@ -10,7 +10,7 @@ import { toast } from "react-hot-toast";
 
 import tickCircleGrayIcon from "@/assets/icons/tick-circle-gray.svg";
 import tickCircleIcon from "@/assets/icons/tick-circle.svg";
-import { StatusDetails } from "@/components/account/OrderCard";
+import { StatusDetails } from "@/app/(client)/account/OrderCard";
 import ChevronLeftIcon from "@/components/icons/ChevronLeft";
 import { OrderService } from "@/services/order";
 import { formatDate } from "@/utilities/date";
