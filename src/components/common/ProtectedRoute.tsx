@@ -1,13 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { type ReactNode, useEffect } from "react";
+import { useEffect, useMemo, type ReactNode } from "react";
 import { toast } from "react-hot-toast";
 
 import Storage from "@/utilities/storage";
 
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
-  const storage = new Storage();
+  const storage = useMemo(() => new Storage(), []);
   const router = useRouter();
   const accessCookie = storage.getCookie("access");
 

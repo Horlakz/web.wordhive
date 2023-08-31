@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
-import Modal from "../common/Modal";
+import Modal from "@/components/common/Modal";
 import OrderModal from "./OrderModal";
 
 export interface StatusDetails {

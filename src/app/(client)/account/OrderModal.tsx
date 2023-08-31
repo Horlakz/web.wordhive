@@ -5,7 +5,7 @@ import classNames from "classnames";
 import arrowLeftIcon from "@/assets/icons/arrow-left.svg";
 import tickCircleIcon from "@/assets/icons/tick-circle.svg";
 import tickCircleGrayIcon from "@/assets/icons/tick-circle-gray.svg";
-import { StatusDetails } from "@/components/account/OrderCard";
+import { StatusDetails } from "./OrderCard";
 import { formatDate } from "@/utilities/date";
 
 interface Props {

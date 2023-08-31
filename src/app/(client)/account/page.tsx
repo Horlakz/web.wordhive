@@ -2,14 +2,13 @@
 
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import Button from "@/components/common/Button";
 import { UserService } from "@/services/auth/user";
-import OrderCard, { OrderData } from "@/components/account/OrderCard";
 import { OrderService } from "@/services/order";
 import LoadingPage from "../loading";
+import OrderCard, { OrderData } from "./OrderCard";
 
 function AccountPage() {
   const userService = new UserService();
