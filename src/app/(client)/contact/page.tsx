@@ -34,22 +34,11 @@ const ContactPage = () => {
       onSuccess: () => {
         toast.success("Message sent");
         // Clear form data
-
-        handleChange({
-          target: { name: "fullname", value: "" },
-        } as React.ChangeEvent<HTMLInputElement>);
-        handleChange({
-          target: { name: "email", value: "" },
-        } as React.ChangeEvent<HTMLInputElement>);
-        handleChange({
-          target: { name: "phone", value: "" },
-        } as React.ChangeEvent<HTMLInputElement>);
-        handleChange({
-          target: { name: "country", value: "" },
-        } as React.ChangeEvent<HTMLInputElement>);
-        handleChange({
-          target: { name: "message", value: "" },
-        } as React.ChangeEvent<HTMLTextAreaElement>);
+        for (const i of Object.keys(formData)) {
+          handleChange({
+            target: { name: i, value: "" },
+          } as any);
+        }
       },
       onError: (err: any) => {
         toast.error(
@@ -63,7 +52,7 @@ const ContactPage = () => {
 
   const { data, isSuccess, isError, isLoading } = useQuery(
     ["faqs"],
-    async () => await faqService.listFaq(),
+    async () => await faqService.listFaq(""),
     {
       onError: (err: any) => {
         toast.error(
@@ -119,15 +108,26 @@ const ContactPage = () => {
           <InputGroup.Input
             label="Email"
             type="email"
+            value={form.email}
             onChange={handleChange}
           />
-          <InputGroup.Input label="Phone" type="tel" onChange={handleChange} />
-          <InputGroup.Input label="Country" onChange={handleChange} />
+          <InputGroup.Input
+            label="Phone"
+            type="tel"
+            value={form.phone}
+            onChange={handleChange}
+          />
+          <InputGroup.Input
+            label="Country"
+            value={form.country}
+            onChange={handleChange}
+          />
           <InputGroup.TextArea
             className="sm:col-span-2"
             label="Your Message"
             name="message"
             rows={5}
+            value={form.message}
             onChange={handleChange}
           />
           <Button
