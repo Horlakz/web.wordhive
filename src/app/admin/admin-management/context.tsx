@@ -22,7 +22,7 @@ interface AdminManagementProviderProps {
 
 export const AdminManagementContext = createContext<AdminManagementContextType>(
   {
-    formData: INITIAL_FORM,
+    formData: { fullname: "", email: "", password: "", isAdmin: true },
     setForm: () => {},
     modal: false,
     setModal: () => {},
