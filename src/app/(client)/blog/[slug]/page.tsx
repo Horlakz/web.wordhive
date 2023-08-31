@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import chevronLeft from "@/assets/icons/chevron-left.svg";
 import dot from "@/assets/icons/dot.svg";
-import BlogCard from "@/components/blog/Card";
+import BlogCard from "../Card";
 import { BlogService } from "@/services/blog";
 import { BlogCategoryData } from "@/services/blog/category";
 import { BlogCommentData, BlogCommentService } from "@/services/blog/comment";

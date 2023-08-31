@@ -1,7 +1,7 @@
 import type { Key } from "react";
 import type { NextPage } from "next";
 
-import BlogCard from "@/components/blog/Card";
+import BlogCard from "./Card";
 import { BlogService } from "@/services/blog";
 import {
   BlogCategoryData,

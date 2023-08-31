@@ -2,7 +2,7 @@ import type { StaticImageData } from "next/image";
 import type { NextPage } from "next";
 
 import dummy from "@/assets/images/dummy.png";
-import ServiceCard from "@/components/services/Card";
+import ServiceCard from "./Card";
 import { ApplicationService } from "@/services/services";
 import { ApplicationServiceCategory } from "@/services/services/category";
 import SortByCategory from "@/components/common/SortByCategory";

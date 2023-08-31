@@ -3,9 +3,9 @@ import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 
 import heroImage from "@/assets/images/hero.svg";
-import ValueCard from "@/components/about/ValueCard";
+import ValueCard from "./ValueCard";
 import * as pageData from "./data";
-import InquirySection from "@/components/about/InquirySection";
+import InquirySection from "./InquirySection";
 
 function About() {
   return (
